@@ -1,0 +1,68 @@
+@media screen and (max-width:767px) {
+    .app-content {
+        margin: 20px 20px 71px;
+    }
+    .app-sidebar {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1439px) {
+    .app-content {
+        margin: 40px 40px 434px;
+    }
+    .app-sidebar {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    /* APP CONTENT */
+    .app-content {
+        border: 3px solid green;
+        margin: 40px 620px 140px 140px;
+    }
+    /* APP HEADER */
+    .app-header__left {
+        width: 87px;
+        height: 28px;
+        font-weight: bold;
+        font-size: 20px;
+        line-height: 28px;
+    }
+    .app-header__right {
+        display: none;
+    }
+    /* APP HEADING */
+    .app-heading {
+        margin-top: 78px;
+    }
+    .app-heading p {
+        height: 44px;
+        line-height: 44px;
+    }
+    .app-heading p:first-child {
+        font-weight: bold;
+        font-size: 32px;
+    }
+    .app-heading p:last-child {
+        width: 315px;
+        font-weight: 500;
+        font-size: 24px;
+    }
+    /* APP FORM */
+    .app-form {
+        border: 3px solid blue;
+        margin-top: 43px;
+    }
+    /* APP SIDEBAR */
+    .app-sidebar {
+        border: 3px solid red;
+        width: 480px;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+
