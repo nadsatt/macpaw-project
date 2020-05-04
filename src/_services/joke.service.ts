@@ -13,7 +13,7 @@ export class JokeService {
   private apiJokeCategories: string = 'https://api.chucknorris.io/jokes/categories';
   private apiRandomJoke: string = 'https://api.chucknorris.io/jokes/random';
   private apiRandomJokeByCategory = 'https://api.chucknorris.io/jokes/random?category=';
-  private apiJokesBytext = 'https://api.chucknorris.io/jokes/search?query=';
+  private apiJokesBySearch = 'https://api.chucknorris.io/jokes/search?query=';
 
   constructor(private http: HttpClient) { }
 
@@ -29,8 +29,8 @@ export class JokeService {
     return this.http.get<Joke>(this.apiRandomJokeByCategory + category);
   }
 
-  public GetJokesByText(text: string): Observable<any> {
-    return this.http.get<any>(this.apiJokesBytext + text).pipe(
+  public GetJokesBySearch(search: string): Observable<any> {
+    return this.http.get<any>(this.apiJokesBySearch + search).pipe(
       catchError(err => {
         if (err.status.toString().startsWith('4')){
           console.log(err.status)

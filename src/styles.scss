@@ -1,5 +1,5 @@
-@import './shared/custom-theme.scss';
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap');
+@import './shared/custom-theme.scss';
 
 * {
 	vertical-align: baseline;
@@ -7,7 +7,7 @@
 	font-family: inherit;
 	font-style: inherit;
 	font-size: 100%;
-	color: #333333;
+	color: inherit;
 	border: 0 none;
 	outline: 0;
 	padding: 0;
@@ -16,5 +16,9 @@
 }
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body { 
+	font-family: Roboto, sans-serif; 
+	color: #333333;
+}
 

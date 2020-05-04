@@ -1,7 +1,8 @@
-<section class="app-content">
-  <div class="app-header">
-    <div class="app-header__left">MSI 2020</div>
-    <div class="app-header__right">
+<main class="main">
+  
+  <header class="header">
+    <div class="header__left">MSI 2020</div>
+    <div class="header__right">
       <span>
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="14" cy="14" r="14" fill="#333333"/>
@@ -11,22 +12,63 @@
       </span>
       <span>Favourite</span>
     </div>
-  </div>
-  <div class="app-heading">
+  </header>
+
+  <div class="heading">
     <p>Hey!</p>
     <p>Let's try to find a joke for you:</p>
   </div>
-  <form class="app-form">
-    <input type="radio" id="jokeTypeRandom" name="jokeType">
-    <label for="jokeTypeRandom">Random</label>
-    <input type="radio" id="jokeTypeCategory" name="jokeType">
-    <label for="jokeTypeCategory">From categories</label>
-    <input type="radio" id="jokeTypeSearch" name="jokeType">
-    <label for="jokeTypeSearch">Search</label>
-    <button>Get a joke</button>
-  </form>
-  <div class="app-jokes">
-  </div>
-</section>
 
-<section class="app-sidebar"></section>
+  <form class="joke-form"
+        [formGroup]="jokeForm">
+    <mat-radio-group class="joke-form__radio-group"
+                     formControlName="getJokeBy">
+      <div class="joke-form__random">
+        <mat-radio-button class="joke-form__radio joke-form__random-radio" 
+                          value="getJokeByRandom" 
+                          checked>
+                          Random
+        </mat-radio-button>
+      </div>
+      <div class="joke-form__category">
+        <mat-radio-button class="joke-form__radio joke-form__category-radio" 
+                          value="getJokeByCategory">
+                          From categories
+        </mat-radio-button>
+        <div class="joke-form__category-group"
+             *ngIf="jokeForm.get('getJokeBy').value === 'getJokeByCategory'"> 
+          <button class="joke-form__category-button"
+                  [ngClass]="{'joke-form__category-button--selected': jokeForm.get('category').value === category}"
+                  *ngFor="let category of categories"
+                  (click)="SelectCategory(category)">
+                  {{category}}
+          </button>    
+        </div>
+      </div>
+      <div class="joke-form__search">
+        <mat-radio-button class="joke-form__radio joke-form__search-radio" 
+                          value="getJokeBySearch">
+                          Search
+        </mat-radio-button>
+        <input class="joke-form__search-field" 
+               matInput 
+               formControlName="search" 
+               placeholder="Free text search..."
+               *ngIf="jokeForm.get('getJokeBy').value === 'getJokeBySearch'">
+      </div>
+    </mat-radio-group>
+    <button class="joke-form__button"
+            [disabled]="jokeForm.get('getJokeBy').value === 'getJokeBySearch' && !jokeForm.get('search').value"
+            (click)="GetJoke()">
+            Get a joke
+    </button>
+  </form>
+
+
+  <div class="jokes">
+    <div class="joke" *ngFor="let joke of jokes">{{joke.value}}</div>
+  </div>
+
+</main>
+
+<section class="sidebar"></section>
