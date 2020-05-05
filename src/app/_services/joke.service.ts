@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 import { Joke } from '../_models/joke';
 
 @Injectable({
@@ -40,24 +40,9 @@ export class JokeService {
     );
   }
 
-  public GetJokesBySearch(search: string): Observable<Joke[]> {
-    return this.http.get<Joke[]>(this.apiJokesBySearch + search).pipe(
-      map(jokes => {
-        let updJokes = jokes.map(joke => {
-          joke.isFavourite = false;
-          return joke;
-        });
-        return updJokes;
-      }),
-      catchError(err => {
-        if (err.status && err.status.toString().startsWith('4')){
-          console.log(err.status)
-          return of([]);
-        }
-        else {
-          return throwError(err);
-        }
-      }) 
+  public GetJokesBySearch(search: string): Observable<any> {
+    return this.http.get<any>(this.apiJokesBySearch + search).pipe(
+      tap(jokes => jokes.total > 0 ? jokes.result : [])
     );
   }
 }

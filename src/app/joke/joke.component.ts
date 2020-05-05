@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Joke } from '../_models/joke';
 
 @Component({
@@ -9,22 +9,28 @@ import { Joke } from '../_models/joke';
 
 export class JokeComponent implements OnInit {
 
-  @Input() joke: Joke;
+  @Input() public joke: Joke;
+  @Output() public jokeFavourited: EventEmitter<Joke> = new EventEmitter<Joke>();
+  @Output() public jokeUnfavourited: EventEmitter<Joke> = new EventEmitter<Joke>();
   public lastUpdate: number;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.lastUpdate = this.CalculateLastUpdate(this.joke.updated_at);
-    console.log('initiated');
+    this.CalculateLastUpdate();
   }
 
-  private CalculateLastUpdate(updatedAt: string): number {
-    let lastUpdate = Math.floor((Date.now() - Date.parse(updatedAt))/ 3600000);
-    return lastUpdate;
+  private CalculateLastUpdate(): void {
+    this.lastUpdate = this.joke.updated_at ? Math.floor((Date.now() - Date.parse(this.joke.updated_at))/ 3600000): null;
   }
 
-  public ToggleFavourite(): void {
-    this.joke.isFavourite = !this.joke.isFavourite;
+  public Favourite(): void {
+    this.joke.isFavourite = true;
+    this.jokeFavourited.emit(this.joke);
+  }
+
+  public Unfavourite(): void {
+    this.joke.isFavourite = false;
+    this.jokeUnfavourited.emit(this.joke);
   }
 }

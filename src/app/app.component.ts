@@ -11,14 +11,15 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 
 export class AppComponent implements OnInit {
 
-  public jokes: Joke[];
+  public jokes: Joke[]; 
+  public favJokes: Joke[]; 
 
-  get sessionJokes(): Joke[] {
-    let sessionJokes = JSON.parse(sessionStorage.getItem('jokes'));
-    return sessionJokes;
+  get storedFavJokeIds(): string[] {
+    let sessionFavJokeIds = JSON.parse(sessionStorage.getItem('favJokeIds'));
+    return sessionFavJokeIds;
   }
-  set sessionJokes(jokes: Joke[]) {
-    sessionStorage.setItem('jokes', JSON.stringify(jokes));
+  set storedFavJokeIds(updSessionFavJokeIds: string[]) {
+    sessionStorage.setItem('favJokeIds', JSON.stringify(updSessionFavJokeIds));
   }
 
   public categories: string[];
@@ -29,9 +30,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.jokes = [];
-    if (!this.sessionJokes) {
-      this.sessionJokes = [];
+    if (!this.storedFavJokeIds){
+      this.storedFavJokeIds = [];
     }
+    this.favJokes = this.GetStoredFavJokes();
     this.categories = [];
     this.GetJokeCategories();
     this.jokeForm = this.fb.group({
@@ -39,6 +41,40 @@ export class AppComponent implements OnInit {
       category: '',
       search: ''
     });
+  }
+
+  public FavouriteJoke(favouritedJoke: Joke): void {
+    let storedfavJokeIds = this.storedFavJokeIds;
+    storedfavJokeIds.push(favouritedJoke.id);
+    this.storedFavJokeIds = storedfavJokeIds
+
+    sessionStorage.setItem(favouritedJoke.id, JSON.stringify(favouritedJoke));
+    this.favJokes = this.GetStoredFavJokes();
+
+    this.jokes = this.jokes.filter(joke => joke.id !== favouritedJoke.id);
+  }
+
+  public UnfavouriteJoke(unfavouritedJoke: Joke): void {
+    let storedFavJokeIds = this.storedFavJokeIds;
+    storedFavJokeIds = storedFavJokeIds.filter(jokeId => jokeId !== unfavouritedJoke.id);
+    this.storedFavJokeIds = storedFavJokeIds;
+
+    sessionStorage.removeItem(unfavouritedJoke.id);
+    this.favJokes = this.GetStoredFavJokes();
+
+    this.jokes.unshift(unfavouritedJoke);
+  }
+
+  public GetStoredFavJokes(): Joke[] {
+    let favJokes = [];
+    if (this.storedFavJokeIds.length > 0){
+      for (let i = 0; i < this.storedFavJokeIds.length; i++){
+        let id = this.storedFavJokeIds[i];
+        let joke = JSON.parse(sessionStorage.getItem(id));
+        favJokes.push(joke);
+      }
+    }
+    return favJokes;
   }
 
   public GetJokeCategories(): void {
@@ -56,11 +92,11 @@ export class AppComponent implements OnInit {
 
   public GetJoke(): void {
     if (this.jokeForm.get('getJokeBy').value === 'getJokeByRandom') {
-      this.GetRandomJoke();
+      this.GetJokeByRandom();
     }
     else if (this.jokeForm.get('getJokeBy').value === 'getJokeByCategory') {
       let category = this.jokeForm.get('category').value;
-      this.GetRandomJokeByCategory(category);
+      this.GetJokeByCategory(category);
     }
     else {
       let search = this.jokeForm.get('search').value;
@@ -68,27 +104,19 @@ export class AppComponent implements OnInit {
     }
   }
 
-  public GetRandomJoke(): void {
+  public GetJokeByRandom(): void {
     this.jokeService.GetRandomJoke().subscribe({
       next: joke => {
-        let updSessionJokes = this.sessionJokes;
-        updSessionJokes.push(joke);
-        this.sessionJokes = updSessionJokes;
-
-        this.jokes = this.sessionJokes
+        this.jokes.push(joke);
       },
       error: err => console.error(err)
     });
   }
 
-  public GetRandomJokeByCategory(category: string): void {
+  public GetJokeByCategory(category: string): void {
     this.jokeService.GetRandomJokeByCategory(category).subscribe({
       next: joke => {
-        let updSessionJokes = this.sessionJokes;
-        updSessionJokes.push(joke);
-        this.sessionJokes = updSessionJokes;
-
-        this.jokes = this.sessionJokes;
+        this.jokes.push(joke);
       },
       error: err => console.error(err)
     });
@@ -96,18 +124,7 @@ export class AppComponent implements OnInit {
 
   public GetJokesBySearch(search: string): void {
     this.jokeService.GetJokesBySearch(search).subscribe({
-      next: jokes => {
-        if (jokes.length > 0){
-          let updSessionJokes = this.sessionJokes;     
-          updSessionJokes.push(...jokes);
-          this.sessionJokes = updSessionJokes;
-
-          this.jokes = this.sessionJokes
-        }
-        else {
-          console.log('no jokes for this text');
-        }
-      },
+      next: jokes => {this.jokes.push(...jokes.result)},
       error: err => console.error(err)
     });
   }

@@ -65,13 +65,24 @@
     </button>
   </form>
 
-  <div class="jokes" *ngIf="jokes.length > 0">
+  <div class="jokes" *ngIf="jokes && jokes.length > 0">
     <app-joke class="joke" 
               *ngFor="let joke of jokes" 
-              [joke]="joke">
+              [joke]="joke"
+              (jokeFavourited)="FavouriteJoke($event)"
+              (jokeUnfavourited)="UnfavouriteJoke($event)">
     </app-joke>
   </div>
 
 </main>
 
-<section class="sidebar"></section>
+<section class="sidebar">
+  <div class="sidebar__fav-jokes-container"
+       *ngIf="favJokes && favJokes.length > 0">
+    <app-joke class="joke"
+              *ngFor="let joke of favJokes"
+              [joke]="joke"
+              (jokeUnfavourited)="UnfavouriteJoke($event)">
+    </app-joke>
+  </div>
+</section>
