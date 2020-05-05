@@ -5,10 +5,12 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { MaterialModule } from '../shared/material.module';
+import { JokeComponent } from './joke/joke.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    JokeComponent
   ],
   imports: [
     BrowserModule,

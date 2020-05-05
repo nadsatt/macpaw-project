@@ -50,11 +50,12 @@
                           value="getJokeBySearch">
                           Search
         </mat-radio-button>
-        <input class="joke-form__search-field" 
+        <textarea class="joke-form__search-field" 
                matInput 
                formControlName="search" 
                placeholder="Free text search..."
-               *ngIf="jokeForm.get('getJokeBy').value === 'getJokeBySearch'">
+               *ngIf="jokeForm.get('getJokeBy').value === 'getJokeBySearch'"></textarea>
+
       </div>
     </mat-radio-group>
     <button class="joke-form__button"
@@ -64,9 +65,11 @@
     </button>
   </form>
 
-
-  <div class="jokes">
-    <div class="joke" *ngFor="let joke of jokes">{{joke.value}}</div>
+  <div class="jokes" *ngIf="jokes.length > 0">
+    <app-joke class="joke" 
+              *ngFor="let joke of jokes" 
+              [joke]="joke">
+    </app-joke>
   </div>
 
 </main>

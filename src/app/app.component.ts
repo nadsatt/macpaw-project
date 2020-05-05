@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Joke } from 'src/_models/joke';
-import { JokeService } from 'src/_services/joke.service';
-import { NgForm, FormGroup, FormBuilder } from '@angular/forms';
-import { strict } from 'assert';
+import { Joke } from 'src/app/_models/joke';
+import { JokeService } from 'src/app/_services/joke.service';
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +10,17 @@ import { strict } from 'assert';
 })
 
 export class AppComponent implements OnInit {
-  
+
   public jokes: Joke[];
+
+  get sessionJokes(): Joke[] {
+    let sessionJokes = JSON.parse(sessionStorage.getItem('jokes'));
+    return sessionJokes;
+  }
+  set sessionJokes(jokes: Joke[]) {
+    sessionStorage.setItem('jokes', JSON.stringify(jokes));
+  }
+
   public categories: string[];
   public jokeForm: FormGroup;
 
@@ -21,6 +29,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.jokes = [];
+    if (!this.sessionJokes) {
+      this.sessionJokes = [];
+    }
     this.categories = [];
     this.GetJokeCategories();
     this.jokeForm = this.fb.group({
@@ -44,7 +55,6 @@ export class AppComponent implements OnInit {
   }
 
   public GetJoke(): void {
-    console.log('clicked')
     if (this.jokeForm.get('getJokeBy').value === 'getJokeByRandom') {
       this.GetRandomJoke();
     }
@@ -60,14 +70,26 @@ export class AppComponent implements OnInit {
 
   public GetRandomJoke(): void {
     this.jokeService.GetRandomJoke().subscribe({
-      next: joke => this.jokes.push(joke),
+      next: joke => {
+        let updSessionJokes = this.sessionJokes;
+        updSessionJokes.push(joke);
+        this.sessionJokes = updSessionJokes;
+
+        this.jokes = this.sessionJokes
+      },
       error: err => console.error(err)
     });
   }
 
   public GetRandomJokeByCategory(category: string): void {
     this.jokeService.GetRandomJokeByCategory(category).subscribe({
-      next: joke => this.jokes.push(joke),
+      next: joke => {
+        let updSessionJokes = this.sessionJokes;
+        updSessionJokes.push(joke);
+        this.sessionJokes = updSessionJokes;
+
+        this.jokes = this.sessionJokes;
+      },
       error: err => console.error(err)
     });
   }
@@ -75,11 +97,15 @@ export class AppComponent implements OnInit {
   public GetJokesBySearch(search: string): void {
     this.jokeService.GetJokesBySearch(search).subscribe({
       next: jokes => {
-        if (jokes.isArray){
-          this.jokes.push(...jokes.result);
+        if (jokes.length > 0){
+          let updSessionJokes = this.sessionJokes;     
+          updSessionJokes.push(...jokes);
+          this.sessionJokes = updSessionJokes;
+
+          this.jokes = this.sessionJokes
         }
         else {
-          console.log(jokes);
+          console.log('no jokes for this text');
         }
       },
       error: err => console.error(err)

@@ -1,10 +1,11 @@
 export class Joke {
     public categories: string[];
-    public created_at: Date;
+    public created_at: string;
     public icon_url: string;
     public id: string;
-    public updated_at: Date;
+    public updated_at: string;
     public url: string;
     public value: string;
-    public isFavourite: boolean;
+    public isFavourite?: boolean;
+    public fecthedByCategory?: string;
 }

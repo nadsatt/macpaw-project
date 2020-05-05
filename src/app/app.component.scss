@@ -107,6 +107,7 @@
                         border-radius: 10px;
                         margin-top: 20px;
                         padding: 10px 15px;
+                        resize: none;
                     }
                 }
             }
@@ -121,6 +122,12 @@
                 font-size: 16px;
                 line-height: 22px;
                 padding: 10px 40px;
+            }
+        }
+        .jokes {
+            margin-top: 40px;
+            .joke {
+             
             }
         }
     }
