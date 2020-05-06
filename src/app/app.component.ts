@@ -13,27 +13,33 @@ export class AppComponent implements OnInit {
 
   public jokes: Joke[]; 
   public favJokes: Joke[]; 
-
-  get storedFavJokeIds(): string[] {
-    let sessionFavJokeIds = JSON.parse(sessionStorage.getItem('favJokeIds'));
-    return sessionFavJokeIds;
-  }
-  set storedFavJokeIds(updSessionFavJokeIds: string[]) {
-    sessionStorage.setItem('favJokeIds', JSON.stringify(updSessionFavJokeIds));
-  }
-
   public categories: string[];
   public jokeForm: FormGroup;
+
+  get sessionFavJokes(): Joke[] {
+    let favJokes = [];
+    if (sessionStorage.length > 0) {
+      let sessionFavJokes = JSON.parse(sessionStorage.getItem('favJokes'));
+      favJokes = Object.values(sessionFavJokes);
+    }
+    return favJokes;
+  }
+  set sessionFavJokes(favJokes: Joke[]) {
+    let updFavJokes = {};
+    if (favJokes.length > 0) {
+      for (let favJoke of favJokes) {
+        updFavJokes[favJoke.id] = favJoke;
+      }
+    }
+    sessionStorage.setItem('favJokes', JSON.stringify(updFavJokes));
+  }
 
   constructor(private jokeService: JokeService,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
     this.jokes = [];
-    if (!this.storedFavJokeIds){
-      this.storedFavJokeIds = [];
-    }
-    this.favJokes = this.GetStoredFavJokes();
+    this.favJokes = this.sessionFavJokes;
     this.categories = [];
     this.GetJokeCategories();
     this.jokeForm = this.fb.group({
@@ -41,40 +47,6 @@ export class AppComponent implements OnInit {
       category: '',
       search: ''
     });
-  }
-
-  public FavouriteJoke(favouritedJoke: Joke): void {
-    let storedfavJokeIds = this.storedFavJokeIds;
-    storedfavJokeIds.push(favouritedJoke.id);
-    this.storedFavJokeIds = storedfavJokeIds
-
-    sessionStorage.setItem(favouritedJoke.id, JSON.stringify(favouritedJoke));
-    this.favJokes = this.GetStoredFavJokes();
-
-    this.jokes = this.jokes.filter(joke => joke.id !== favouritedJoke.id);
-  }
-
-  public UnfavouriteJoke(unfavouritedJoke: Joke): void {
-    let storedFavJokeIds = this.storedFavJokeIds;
-    storedFavJokeIds = storedFavJokeIds.filter(jokeId => jokeId !== unfavouritedJoke.id);
-    this.storedFavJokeIds = storedFavJokeIds;
-
-    sessionStorage.removeItem(unfavouritedJoke.id);
-    this.favJokes = this.GetStoredFavJokes();
-
-    this.jokes.unshift(unfavouritedJoke);
-  }
-
-  public GetStoredFavJokes(): Joke[] {
-    let favJokes = [];
-    if (this.storedFavJokeIds.length > 0){
-      for (let i = 0; i < this.storedFavJokeIds.length; i++){
-        let id = this.storedFavJokeIds[i];
-        let joke = JSON.parse(sessionStorage.getItem(id));
-        favJokes.push(joke);
-      }
-    }
-    return favJokes;
   }
 
   public GetJokeCategories(): void {
@@ -127,6 +99,24 @@ export class AppComponent implements OnInit {
       next: jokes => {this.jokes.push(...jokes.result)},
       error: err => console.error(err)
     });
+  }
+
+  public FavouriteJoke(favouritedJoke: Joke): void {
+    let storedfavJokes = this.sessionFavJokes;
+    storedfavJokes.push(favouritedJoke);
+    this.sessionFavJokes = storedfavJokes;
+
+    this.favJokes = this.sessionFavJokes;
+    this.jokes = this.jokes.filter(joke => joke.id !== favouritedJoke.id);
+  }
+
+  public UnfavouriteJoke(unfavouritedJoke: Joke): void {
+    let storedFavJokes = this.sessionFavJokes;
+    storedFavJokes = storedFavJokes.filter(joke => joke.id !== unfavouritedJoke.id);
+    this.sessionFavJokes = storedFavJokes;
+
+    this.favJokes = this.sessionFavJokes;
+    this.jokes.unshift(unfavouritedJoke);
   }
 }
 
