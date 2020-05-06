@@ -19,7 +19,6 @@ export class JokeComponent implements OnInit {
 
   ngOnInit(): void {
     this.CalculateLastUpdate();
-    console.log(this.jokeFromFavJokes)
   }
 
   private CalculateLastUpdate(): void {
