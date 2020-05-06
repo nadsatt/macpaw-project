@@ -10,6 +10,7 @@ import { Joke } from '../_models/joke';
 export class JokeComponent implements OnInit {
 
   @Input() public joke: Joke;
+  @Input() public jokeFromFavJokes: boolean;
   @Output() public jokeFavourited: EventEmitter<Joke> = new EventEmitter<Joke>();
   @Output() public jokeUnfavourited: EventEmitter<Joke> = new EventEmitter<Joke>();
   public lastUpdate: number;
@@ -18,6 +19,7 @@ export class JokeComponent implements OnInit {
 
   ngOnInit(): void {
     this.CalculateLastUpdate();
+    console.log(this.jokeFromFavJokes)
   }
 
   private CalculateLastUpdate(): void {

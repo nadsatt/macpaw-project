@@ -96,7 +96,9 @@ export class AppComponent implements OnInit {
 
   public GetJokesBySearch(search: string): void {
     this.jokeService.GetJokesBySearch(search).subscribe({
-      next: jokes => {this.jokes.push(...jokes.result)},
+      next: jokes => {
+        this.jokes.push(...jokes.result);
+      },
       error: err => console.error(err)
     });
   }
@@ -107,7 +109,6 @@ export class AppComponent implements OnInit {
     this.sessionFavJokes = storedfavJokes;
 
     this.favJokes = this.sessionFavJokes;
-    this.jokes = this.jokes.filter(joke => joke.id !== favouritedJoke.id);
   }
 
   public UnfavouriteJoke(unfavouritedJoke: Joke): void {
@@ -116,7 +117,9 @@ export class AppComponent implements OnInit {
     this.sessionFavJokes = storedFavJokes;
 
     this.favJokes = this.sessionFavJokes;
-    this.jokes.unshift(unfavouritedJoke);
+    if (this.jokes.findIndex(joke => joke.id === unfavouritedJoke.id) === -1){
+      this.jokes.unshift(unfavouritedJoke);
+    }
   }
 }
 

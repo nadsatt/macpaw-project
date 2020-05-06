@@ -69,6 +69,7 @@
     <app-joke class="joke" 
               *ngFor="let joke of jokes" 
               [joke]="joke"
+              [jokeFromFavJokes]=false
               (jokeFavourited)="FavouriteJoke($event)"
               (jokeUnfavourited)="UnfavouriteJoke($event)">
     </app-joke>
@@ -80,9 +81,9 @@
   <div class="sidebar__fav-jokes-container"
        *ngIf="favJokes && favJokes.length > 0">
     <app-joke class="joke"
-              *ngFor="let joke of favJokes"
-              [joke]="joke"
-              (jokeUnfavourited)="UnfavouriteJoke($event)">
+              *ngFor="let favJoke of favJokes"
+              [joke]="favJoke"
+              [jokeFromFavJokes]=true>
     </app-joke>
   </div>
 </section>
