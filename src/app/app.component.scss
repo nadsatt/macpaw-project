@@ -18,7 +18,8 @@
 
 @media screen and (min-width: 1440px) {
     .main {
-        margin: 40px 620px 140px 140px;
+        width: calc(100% - 480px);
+        padding: 40px 140px 140px;
         header {
             .header__left {
                 width: 87px;
@@ -132,13 +133,23 @@
         }
     }
 
-    .sidebar {
-        border: 3px solid red;
+    .fav-jokes {
+        background: #F8F8F8;
         width: 480px;
         height: 100vh;
+        padding: 40px;
         position: absolute;
         top: 0;
         right: 0;
+        .fav-jokes__header {
+            width: 84px;
+            height: 28px;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 20px;
+            line-height: 28px;
+            color: #ABABAB;
+        }
     }
 }
 

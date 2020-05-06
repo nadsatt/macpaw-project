@@ -4,9 +4,9 @@
     margin-top: 20px;
     padding: 40px;   
     border-radius: 20px; 
-    background: #F8F8F8;
+    background-color: #F8F8F8;
     font-style: normal;
-    .joke__favourite-button {
+    .joke__fav-button {
         display: flex;
         justify-content:flex-end;
     }
@@ -25,22 +25,26 @@
                 border-radius: 50%;
                 overflow: visible;
             }
+            .fav-joke__icon {
+                background-color:  #F8F8F8;
+                border-color:  #F8F8F8;
+            }
         }
         .joke__container-right {
-            padding-left: 20px;
             width: calc(100% - 40px);
+            padding-left: 20px;
             .joke__link {
                 height: 14px;
                 line-height: 14px;
                 .joke__link-content {
+                    height: 100%;
+                    width: auto;
+                    margin-right: 5px;
                     display: inline-block;
                     vertical-align: top;
-                    height: 100%;
-                    font-weight: 500;
                     font-size: 10px;
+                    font-weight: 500;
                     color: #ABABAB;
-                    margin-right: 5px;
-                    span { }
                     a {
                         color: rgb(142,167,255);
                     }
@@ -56,14 +60,18 @@
                 line-height: 26px;
                 margin-top: 5px;
             }
+            .fav-joke__value {
+                font-size: 14px;
+                line-height: 20px;
+            }
             .joke__info {
+                height: 24px;
                 display: flex;
                 justify-content: space-between;
                 margin-top: 23px;
-                height: 24px;
                 .joke__last-update {
                     margin-bottom: 5px;
-                    height: 14px;
+                    height: 100%;
                     line-height: 14px;
                     align-self: flex-end;
                     font-weight: normal;
@@ -89,7 +97,16 @@
                     font-size: 10px;
                 }
             }
+            .fav-joke__info {
+                height: 14px;
+                margin-top: 20px;
+            }
         }
     }
    
+}
+
+.fav-joke {
+    background-color: #FFFFFF;
+    padding: 20px;
 }

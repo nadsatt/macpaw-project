@@ -65,7 +65,8 @@
     </button>
   </form>
 
-  <div class="jokes" *ngIf="jokes && jokes.length > 0">
+  <div class="jokes" 
+       *ngIf="jokes && jokes.length > 0">
     <app-joke class="joke" 
               *ngFor="let joke of jokes" 
               [joke]="joke"
@@ -77,8 +78,9 @@
 
 </main>
 
-<section class="sidebar">
-  <div class="sidebar__fav-jokes-container"
+<section class="fav-jokes">
+  <p class="fav-jokes__header">Favourite</p>
+  <div class="fav-jokes__container"
        *ngIf="favJokes && favJokes.length > 0">
     <app-joke class="joke"
               *ngFor="let favJoke of favJokes"
