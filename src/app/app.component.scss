@@ -1,5 +1,78 @@
 @media screen and (max-width:767px) {
-    
+    .jokes-search-section {
+        padding: 20px 20px 0;
+        .header {
+            height: 28px;
+            display: flex;
+            justify-content: space-between;
+            font-style: normal;
+            .header__left {
+                width: 87px;
+                height: 28px;
+                font-weight: bold;
+                font-size: 20px;
+                line-height: 28px;
+            }
+            .header__right {
+                display: flex;
+                align-items: center;
+                svg {
+                    margin-right: 10px;
+                }
+                span {
+                    width: 84px;
+                    font-weight: 500;
+                    font-size: 20px;
+                    line-height: 28px;
+                    color: #ABABAB;
+                }
+            }
+        }
+        .heading {
+            margin-top: 78px;
+            p {
+                height: 44px;
+                line-height: 44px;
+            }
+            p:first-child {
+                font-weight: bold;
+                font-size: 32px;
+            }
+            p:last-child {
+                width: 315px;
+                font-weight: 500;
+                font-size: 24px;
+            }
+        }
+        .joke-form {
+            margin-top: 43px;
+        }
+    }
+    .fav-jokes-section--tabl {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #F8F8F8;
+        overflow: scroll;
+        padding: 20px 20px 0;
+        p {
+            width: 84px;
+            height: 28px;
+            line-height: 28px;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 20px;
+            color: #ABABAB;
+        }
+        .fav-jokes-section__background {
+            display: none;
+        }
+    }
+    .fav-jokes-section--desk {
+        display: none;
+    }
 }
 
 @media screen and (min-width: 768px) and (max-width: 1439px) {
@@ -59,7 +132,7 @@
         top: 0;
         right: 0;
         bottom: 0;
-        padding: 40px;
+        padding: 40px 40px 0;
         background-color: #F8F8F8;
         overflow: scroll;
         .fav-jokes-section__header {
