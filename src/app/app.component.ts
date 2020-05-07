@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Renderer2 } from '@angular/core';
 import { Joke } from 'src/app/_models/joke';
 import { JokeService } from 'src/app/_services/joke.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -13,8 +12,7 @@ export class AppComponent implements OnInit {
 
   public jokes: Joke[]; 
   public favJokes: Joke[]; 
-  public categories: string[];
-  public jokeForm: FormGroup;
+  public showFavJokes: boolean;
 
   get sessionFavJokes(): Joke[] {
     let favJokes = [];
@@ -35,45 +33,12 @@ export class AppComponent implements OnInit {
   }
 
   constructor(private jokeService: JokeService,
-    private fb: FormBuilder) { }
+    private renderer: Renderer2) { }
 
   ngOnInit(): void {
     this.jokes = [];
     this.favJokes = this.sessionFavJokes;
-    this.categories = [];
-    this.GetJokeCategories();
-    this.jokeForm = this.fb.group({
-      getJokeBy: 'getJokeByRandom',
-      category: '',
-      search: ''
-    });
-  }
-
-  public GetJokeCategories(): void {
-    this.jokeService.GetJokeCategories().subscribe({
-      next: categories => {
-        this.categories = categories;
-        this.jokeForm.patchValue({'category': this.categories[0]});},
-      error:  err => console.error(err)
-    });
-  }
-
-  public SelectCategory(category: string): void {
-    this.jokeForm.patchValue({'category': category});
-  }
-
-  public GetJoke(): void {
-    if (this.jokeForm.get('getJokeBy').value === 'getJokeByRandom') {
-      this.GetJokeByRandom();
-    }
-    else if (this.jokeForm.get('getJokeBy').value === 'getJokeByCategory') {
-      let category = this.jokeForm.get('category').value;
-      this.GetJokeByCategory(category);
-    }
-    else {
-      let search = this.jokeForm.get('search').value;
-      this.GetJokesBySearch(search);
-    }
+    this.showFavJokes = false;
   }
 
   public GetJokeByRandom(): void {
@@ -120,6 +85,16 @@ export class AppComponent implements OnInit {
     if (this.jokes.findIndex(joke => joke.id === unfavouritedJoke.id) === -1){
       this.jokes.unshift(unfavouritedJoke);
     }
+  }
+
+  public ShowFavJokes(): void {
+    this.showFavJokes = true;
+    this.renderer.setStyle(document.body, 'overflow', 'hidden');
+  }
+
+  public HideFavJokes(): void {
+    this.showFavJokes = false;
+    this.renderer.setStyle(document.body, 'overflow', 'visible');
   }
 }
 

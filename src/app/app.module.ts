@@ -4,13 +4,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { MaterialModule } from '../shared/material.module';
+import { MaterialModule } from './material/material.module';
 import { JokeComponent } from './joke/joke.component';
+import { JokeFormComponent } from './joke-form/joke-form.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    JokeComponent
+    JokeComponent,
+    JokeFormComponent,
   ],
   imports: [
     BrowserModule,

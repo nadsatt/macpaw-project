@@ -1,26 +1,105 @@
 @media screen and (max-width:767px) {
-    .app-content {
-        margin: 20px 20px 71px;
-    }
-    .app-sidebar {
-        display: none;
-    }
+    
 }
 
 @media screen and (min-width: 768px) and (max-width: 1439px) {
-    .app-content {
-        margin: 40px 40px 434px;
+    .jokes-search-section {
+        min-height: 100vh;
+        padding: 40px 40px 0;
+        .header {
+            height: 28px;
+            display: flex;
+            justify-content: space-between;
+            font-style: normal;
+            .header__left {
+                width: 87px;
+                height: 28px;
+                font-weight: bold;
+                font-size: 20px;
+                line-height: 28px;
+            }
+            .header__right {
+                display: flex;
+                align-items: center;
+                svg {
+                    margin-right: 10px;
+                }
+                span {
+                    width: 84px;
+                    font-weight: 500;
+                    font-size: 20px;
+                    line-height: 28px;
+                    color: #ABABAB;
+                }
+            }
+        }
+        .heading {
+            margin-top: 78px;
+            p {
+                height: 44px;
+                line-height: 44px;
+            }
+            p:first-child {
+                font-weight: bold;
+                font-size: 32px;
+            }
+            p:last-child {
+                width: 315px;
+                font-weight: 500;
+                font-size: 24px;
+            }
+        }
+        .joke-form {
+            margin-top: 43px;
+        }
     }
-    .app-sidebar {
+    .fav-jokes-section--tabl {
+        width: 480px;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        padding: 40px;
+        background-color: #F8F8F8;
+        overflow: scroll;
+        .fav-jokes-section__header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            svg {
+                margin-right: 10px;
+            }
+            span {
+                width: 84px;
+                height: 28px;
+                line-height: 28px;
+                font-style: normal;
+                font-weight: 500;
+                font-size: 20px;
+                color: #ABABAB;
+            }
+        } 
+        .fav-jokes-section__background {
+            background-color: rgba(0, 0, 0, 0.3);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: calc(100% - 480px);
+        }
+    }
+    .fav-jokes-section--desk {
         display: none;
     }
+    
 }
 
 @media screen and (min-width: 1440px) {
-    .main {
+    .jokes-search-section {
         width: calc(100% - 480px);
-        padding: 40px 140px 140px;
-        header {
+        min-height: 100vh;
+        padding: 40px 140px 0;
+        .header {
             .header__left {
                 width: 87px;
                 height: 28px;
@@ -50,106 +129,32 @@
         }
         .joke-form {
             margin-top: 43px;
-            font-style: normal;
-            .joke-form__radio-group {
-                .joke-form__radio {
-                    height: 26px;
-                    display: block;
-                    margin-top: 10px;
-                    font-size: 18px;
-                    color: #333333;
-                    font-weight: normal;
-                    line-height: 26px;
-                }
-                ::ng-deep {
-                    .mat-radio-label-content {
-                        padding-left: 15px;
-                    }
-                }
-                .joke-form__random {
-                    .joke-form__random-radio {
-                        width: 103px;
-                    }
-                }
-                .joke-form__category {
-                    .joke-form__category-radio {
-                        width: 166px;
-                    }
-                    .joke-form__category-group {
-                        margin-top: 20px;
-                        .joke-form__category-button {
-                            height: 28px;
-                            margin: 0 10px 10px 0;
-                            padding: 6px 15px;
-                            border: 2px solid #F8F8F8;
-                            border-radius: 6px;
-                            background-color: white;
-                            font-weight: 500;
-                            font-size: 12px;
-                            letter-spacing: 2px;
-                            text-transform: uppercase;
-                            color: #ABABAB;
-                        }
-                        .joke-form__category-button--selected {
-                            background: #F8F8F8;
-                            border: 2px solid #F8F8F8;
-                            color: #333333;
-                        }
-                    }
-                }
-                .joke-form__search {
-                    .joke-form__search-radio {
-                        width: 91px;
-                    }
-                    .joke-form__search-field {
-                        width: 100%;
-                        height: 42px;
-                        border: 2px solid #333333;
-                        border-radius: 10px;
-                        margin-top: 20px;
-                        padding: 10px 15px;
-                        resize: none;
-                    }
-                }
-            }
-            .joke-form__button {
-                width: 152px;
-                height: 42px;
-                margin-top: 20px;
-                background: linear-gradient(92.01deg, #8EA7FF 0%, #7291FF 100%);
-                color: white;
-                border-radius: 10px;
-                font-weight: bold;
-                font-size: 16px;
-                line-height: 22px;
-                padding: 10px 40px;
-            }
         }
         .jokes {
             margin-top: 40px;
-            .joke {
-
-            }
         }
     }
-
-    .fav-jokes {
-        background: #F8F8F8;
+    .fav-jokes-section--tabl {
+        display: none;
+    }
+    .fav-jokes-section--desk {
         width: 480px;
-        height: 100vh;
-        padding: 40px;
-        position: absolute;
+        position: fixed;
         top: 0;
         right: 0;
-        .fav-jokes__header {
+        bottom: 0;
+        padding: 40px;
+        background-color: #F8F8F8;
+        overflow: scroll;
+            p {
             width: 84px;
             height: 28px;
+            line-height: 28px;
             font-style: normal;
             font-weight: 500;
             font-size: 20px;
-            line-height: 28px;
             color: #ABABAB;
         }
-    }
+    }   
 }
 

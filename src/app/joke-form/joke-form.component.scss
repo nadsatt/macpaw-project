@@ -1,0 +1,76 @@
+.joke-form {
+    font-style: normal;
+    .joke-form__radio-group {
+        .joke-form__radio {
+            height: 26px;
+            display: block;
+            margin-top: 10px;
+            font-size: 18px;
+            color: #333333;
+            font-weight: normal;
+            line-height: 26px;
+        }
+        ::ng-deep {
+            .mat-radio-label-content {
+                padding-left: 15px;
+            }
+        }
+        .joke-form__random {
+            .joke-form__random-radio {
+                width: 103px;
+            }
+        }
+        .joke-form__category {
+            .joke-form__category-radio {
+                width: 166px;
+            }
+            .joke-form__category-group {
+                margin-top: 20px;
+                .joke-form__category-button {
+                    height: 28px;
+                    margin: 0 10px 10px 0;
+                    padding: 6px 15px;
+                    border: 2px solid #F8F8F8;
+                    border-radius: 6px;
+                    background-color: white;
+                    font-weight: 500;
+                    font-size: 12px;
+                    letter-spacing: 2px;
+                    text-transform: uppercase;
+                    color: #ABABAB;
+                }
+                .joke-form__category-button--selected {
+                    background: #F8F8F8;
+                    border: 2px solid #F8F8F8;
+                    color: #333333;
+                }
+            }
+        }
+        .joke-form__search {
+            .joke-form__search-radio {
+                width: 91px;
+            }
+            .joke-form__search-field {
+                width: 100%;
+                height: 42px;
+                border: 2px solid #333333;
+                border-radius: 10px;
+                margin-top: 20px;
+                padding: 10px 15px;
+                resize: none;
+            }
+        }
+    }
+    .joke-form__button {
+        width: 152px;
+        height: 42px;
+        margin-top: 20px;
+        background: linear-gradient(92.01deg, #8EA7FF 0%, #7291FF 100%);
+        color: white;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: 16px;
+        line-height: 22px;
+        padding: 10px 40px;
+    }
+}
