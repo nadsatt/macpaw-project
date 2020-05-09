@@ -1,4 +1,4 @@
-<section class="jokes-search-section">
+<section class="jokes-search">
   <header class="header">
     <span class="header__left">MSI 2020</span>
     <div class="header__right">
@@ -33,7 +33,7 @@
   </div>
 </section>
 
-<section class="fav-jokes-section--desk"> 
+<section class="fav-jokes--desk"> 
   <p>Favourite</p>
   <div *ngIf="favJokes && favJokes.length > 0">
     <app-joke class="joke"
@@ -44,9 +44,9 @@
   </div>
 </section>
 
-<section class="fav-jokes-section--tabl"
+<section class="fav-jokes--tabl"
          *ngIf="showFavJokes">
-  <div class="fav-jokes-section__header">
+  <div class="fav-jokes__header">
     <svg (click)="HideFavJokes()"
           width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="14" cy="14" r="14" fill="#333333"/>
@@ -62,5 +62,5 @@
               [jokeFromFavJokes]=true>
     </app-joke>
   </div>
-  <div  class="fav-jokes-section__background"></div> 
+  <div  class="fav-jokes__background"></div> 
 </section>

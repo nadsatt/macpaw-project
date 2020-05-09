@@ -1,5 +1,5 @@
 @media screen and (max-width:767px) {
-    .jokes-search-section {
+    .jokes-search {
         padding: 20px 20px 0;
         .header {
             height: 28px;
@@ -48,7 +48,7 @@
             margin-top: 43px;
         }
     }
-    .fav-jokes-section--tabl {
+    .fav-jokes--tabl {
         position: fixed;
         top: 0;
         bottom: 0;
@@ -66,17 +66,17 @@
             font-size: 20px;
             color: #ABABAB;
         }
-        .fav-jokes-section__background {
+        .fav-jokes__background {
             display: none;
         }
     }
-    .fav-jokes-section--desk {
+    .fav-jokes--desk {
         display: none;
     }
 }
 
 @media screen and (min-width: 768px) and (max-width: 1439px) {
-    .jokes-search-section {
+    .jokes-search {
         min-height: 100vh;
         padding: 40px 40px 0;
         .header {
@@ -126,7 +126,7 @@
             margin-top: 43px;
         }
     }
-    .fav-jokes-section--tabl {
+    .fav-jokes--tabl {
         width: 480px;
         position: fixed;
         top: 0;
@@ -135,7 +135,7 @@
         padding: 40px 40px 0;
         background-color: #F8F8F8;
         overflow: scroll;
-        .fav-jokes-section__header {
+        .fav-jokes__header {
             display: flex;
             justify-content: flex-end;
             align-items: center;
@@ -152,7 +152,7 @@
                 color: #ABABAB;
             }
         } 
-        .fav-jokes-section__background {
+        .fav-jokes__background {
             background-color: rgba(0, 0, 0, 0.3);
             position: fixed;
             top: 0;
@@ -161,14 +161,14 @@
             width: calc(100% - 480px);
         }
     }
-    .fav-jokes-section--desk {
+    .fav-jokes--desk {
         display: none;
     }
     
 }
 
 @media screen and (min-width: 1440px) {
-    .jokes-search-section {
+    .jokes-search {
         width: calc(100% - 480px);
         min-height: 100vh;
         padding: 40px 140px 0;
@@ -207,10 +207,10 @@
             margin-top: 40px;
         }
     }
-    .fav-jokes-section--tabl {
+    .fav-jokes--tabl {
         display: none;
     }
-    .fav-jokes-section--desk {
+    .fav-jokes--desk {
         width: 480px;
         position: fixed;
         top: 0;
