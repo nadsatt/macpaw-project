@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
   public GetJokeByRandom(): void {
     this.jokeService.GetRandomJoke().subscribe({
       next: joke => {
-        this.jokes.push(joke);
+        this.jokes.unshift(joke);
       },
       error: err => console.error(err)
     });
@@ -53,7 +53,7 @@ export class AppComponent implements OnInit {
   public GetJokeByCategory(category: string): void {
     this.jokeService.GetRandomJokeByCategory(category).subscribe({
       next: joke => {
-        this.jokes.push(joke);
+        this.jokes.unshift(joke);
       },
       error: err => console.error(err)
     });
@@ -62,7 +62,7 @@ export class AppComponent implements OnInit {
   public GetJokesBySearch(search: string): void {
     this.jokeService.GetJokesBySearch(search).subscribe({
       next: jokes => {
-        this.jokes.push(...jokes.result);
+        this.jokes.unshift(...jokes.result);
       },
       error: err => console.error(err)
     });
@@ -70,7 +70,7 @@ export class AppComponent implements OnInit {
 
   public FavouriteJoke(favouritedJoke: Joke): void {
     let storedfavJokes = this.sessionFavJokes;
-    storedfavJokes.push(favouritedJoke);
+    storedfavJokes.unshift(favouritedJoke);
     this.sessionFavJokes = storedfavJokes;
 
     this.favJokes = this.sessionFavJokes;

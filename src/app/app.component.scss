@@ -52,9 +52,6 @@
             margin-top: 40px;
         }
     }
-    .fav-jokes--desk {
-        display: none;
-    }
     .fav-jokes--tabl-mob-hidden {
         display: none;
     }
@@ -144,9 +141,6 @@
             margin-top: 40px;
         }
     }
-    .fav-jokes--desk {
-        display: none;
-    }
     .fav-jokes--tabl-mob-hidden {
         display: none;
     }
@@ -229,6 +223,7 @@
         }
     }
     .fav-jokes--desk {
+        display: block;
         width: 480px;
         position: fixed;
         top: 0;
