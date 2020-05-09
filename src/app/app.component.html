@@ -1,12 +1,12 @@
-<section class="jokes-search">
+<section class="search-jokes">
   <header class="header">
     <span class="header__left">MSI 2020</span>
     <div class="header__right">
       <svg (click)="ShowFavJokes()"
             width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="14" r="14" fill="#333333"/>
-          <rect x="7" y="16" width="14" height="2" rx="1" fill="white"/>
-          <rect x="7" y="10" width="14" height="2" rx="1" fill="white"/>
+            <circle cx="14" cy="14" r="14" fill="#333333"/>
+            <rect x="7" y="16" width="14" height="2" rx="1" fill="white"/>
+            <rect x="7" y="10" width="14" height="2" rx="1" fill="white"/>
       </svg>
       <span>Favourite</span>
     </div>
@@ -17,11 +17,11 @@
   </div>
   <div class="joke-form">
     <app-joke-form (getJokeByRandom)="GetJokeByRandom()"
-                    (getJokeByCategory)="GetJokeByCategory($event)"
-                    (getJokeBySearch)="GetJokesBySearch($event)">
+                   (getJokeByCategory)="GetJokeByCategory($event)"
+                   (getJokeBySearch)="GetJokesBySearch($event)">
     </app-joke-form>
   </div>
-  <div class="jokes" 
+  <div class="jokes-list" 
         *ngIf="jokes && jokes.length > 0">
     <app-joke class="joke" 
               *ngFor="let joke of jokes" 
@@ -32,35 +32,26 @@
     </app-joke>
   </div>
 </section>
-
-<section class="fav-jokes--desk"> 
-  <p>Favourite</p>
-  <div *ngIf="favJokes && favJokes.length > 0">
-    <app-joke class="joke"
-              *ngFor="let favJoke of favJokes"
-              [joke]="favJoke"
-              [jokeFromFavJokes]=true>
-    </app-joke>
-  </div>
-</section>
-
-<section class="fav-jokes--tabl"
-         *ngIf="showFavJokes">
-  <div class="fav-jokes__header">
-    <svg (click)="HideFavJokes()"
-          width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="14" r="14" fill="#333333"/>
-          <rect width="14.8492" height="2.12131" rx="1.06065" transform="matrix(0.707103 -0.707111 0.707103 0.707111 8 18.5)" fill="white"/>
-          <rect width="14.8492" height="2.12131" rx="1.06065" transform="matrix(0.707103 0.707111 -0.707103 0.707111 9.5 8)" fill="white"/>
+<section class="fav-jokes--desk"
+         [ngClass]="{'fav-jokes--tabl-mob-shown':showFavJokes,
+                     'fav-jokes--tabl-mob-hidden': !showFavJokes}">
+  <div class="header">
+    <svg class="header__icon"
+         (click)="HideFavJokes()"
+         width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+         <circle cx="14" cy="14" r="14" fill="#333333"/>
+         <rect width="14.8492" height="2.12131" rx="1.06065" transform="matrix(0.707103 -0.707111 0.707103 0.707111 8 18.5)" fill="white"/>
+         <rect width="14.8492" height="2.12131" rx="1.06065" transform="matrix(0.707103 0.707111 -0.707103 0.707111 9.5 8)" fill="white"/>
     </svg>    
-    <span>Favourite</span>
+    <span class="header__text">Favourite</span>
   </div>
-  <div *ngIf="favJokes && favJokes.length > 0">
+  <div class="jokes-list" 
+       *ngIf="favJokes && favJokes.length > 0">
     <app-joke class="joke"
               *ngFor="let favJoke of favJokes"
               [joke]="favJoke"
               [jokeFromFavJokes]=true>
     </app-joke>
   </div>
-  <div  class="fav-jokes__background"></div> 
+  <div class="jokes__background"></div> 
 </section>
