@@ -1,5 +1,6 @@
 import { JokeService } from './joke.service';
-import { of, Observable, throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
+
 
 describe('JokeService', () => {
   // global arrange 
@@ -12,21 +13,10 @@ describe('JokeService', () => {
   })
 
   describe('GetJokeCategories', () => {
-    beforeEach(() => {
-      httpClientSpy.get.and.returnValue(of(true));
-    })
-
-    it ('should return observable', () => {
-      // act
-      let actual = jokeService.GetJokeCategories();
-
-      // assert
-      expect(actual).toBeInstanceOf(Observable);
-    })
-
     it ('should be called once with defined api', () => {
       // arrange
-      const api: string = 'https://api.chucknorris.io/jokes/categories';
+      httpClientSpy.get.and.returnValue(of(true));
+      let api: string = 'https://api.chucknorris.io/jokes/categories';
 
       // act
       jokeService.GetJokeCategories();
@@ -35,24 +25,32 @@ describe('JokeService', () => {
       expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
       expect(httpClientSpy.get).toHaveBeenCalledWith(api);
     })
+
+    it ('should return expected categories', () => {
+      // arrange 
+      let expected = [
+        "animal","career","celebrity","dev","explicit",
+        "fashion","food","history","money","movie","music",
+        "political","religion","science","sport","travel"
+      ];
+      httpClientSpy.get.and.returnValue(of(expected));
+      let actual;
+
+      // act
+      jokeService.GetJokeCategories().subscribe({
+        next: data => actual = data
+      });
+
+      // assert
+      expect(actual).toEqual(expected);
+    })
   })
 
   describe('GetRandomJoke', () => {
-    beforeEach(() => {
-      httpClientSpy.get.and.returnValue(of(true));
-    })
-
-    it ('should return observable', () => {
-      // act
-      let actual = jokeService.GetRandomJoke();
-
-      // assert
-      expect(actual).toBeInstanceOf(Observable);
-    })
-
     it ('should be called once with defined api', () => {
       // arrange
-      const api: string = 'https://api.chucknorris.io/jokes/random';
+      httpClientSpy.get.and.returnValue(of(true));
+      let api: string = 'https://api.chucknorris.io/jokes/random';
 
       // act
       jokeService.GetRandomJoke();
@@ -61,20 +59,32 @@ describe('JokeService', () => {
       expect(httpClientSpy.get).toHaveBeenCalledTimes(1);
       expect(httpClientSpy.get).toHaveBeenCalledWith(api);
     })
+
+    it ('should return joke', () => {
+      // arrange 
+      let expected = {
+        categories:[],
+        created_at:"2020-01-05 13:42:19.324003",
+        icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+        id:"qd6wpqqyrhilhm1qnq24vq",
+        updated_at:"2020-01-05 13:42:19.324003",
+        url:"https://api.chucknorris.io/jokes/qd6wpqqyrhilhm1qnq24vq",
+        value:"There is no theory of evolution, just a list of creatures Chuck Norris allows to live."
+      };
+      httpClientSpy.get.and.returnValue(of(expected));
+      let actual;
+
+      // act
+      jokeService.GetRandomJoke().subscribe({
+        next: data => actual = data
+      });
+
+      // assert
+      expect(actual).toEqual(expected);
+    })
   })
 
   describe('GetRandomJokeByCategory', () => {
-    it ('should return observable', () => {
-      // arrange
-      httpClientSpy.get.and.returnValue(of(true));
-
-      // act
-      let actual = jokeService.GetRandomJokeByCategory("any");
-
-      // assert
-      expect(actual).toBeInstanceOf(Observable);
-    })
-
     it ('should be called once with defined api + category', () => {
       // arrange
       httpClientSpy.get.and.returnValue(of(true));
@@ -89,7 +99,7 @@ describe('JokeService', () => {
       expect(httpClientSpy.get).toHaveBeenCalledWith(api + category);
     })
 
-    it ('should return modified joke after subscribing to it', () => {
+    it ('should return modified joke', () => {
       // arrange
       let category = "any";
       let joke = {
@@ -110,30 +120,15 @@ describe('JokeService', () => {
         value:"Chuck Norris can eat the flesh of banana without peeling it.",
         fetchedByCategory: category
       };
-      let actual;
 
-      // act
+      // act && assert
       jokeService.GetRandomJokeByCategory(category).subscribe({ 
-        next: data => actual = data
-      });
-
-      // assert
-      expect(actual).toEqual(expected);
+        next: actual => expect(actual).toEqual(expected)
+      }); 
     }) 
   })
 
   describe('GetJokesBySearch', () => {
-    it ('should return observable', () => {
-      // arrange
-      httpClientSpy.get.and.returnValue(of(true));
-
-      // act
-      let actual = jokeService.GetJokesBySearch("text");
-
-      // assert
-      expect(actual).toBeInstanceOf(Observable);
-    })
-
     it ('should be called once with defined api + text', () => {
       // arrange
       httpClientSpy.get.and.returnValue(of(true));
@@ -148,33 +143,52 @@ describe('JokeService', () => {
       expect(httpClientSpy.get).toHaveBeenCalledWith(api + text);
     })
 
-    it ('should return empty array after subscribing to it if 4** error occurs', () => {
+    it('should return jokes', () => {
       // arrange
-      httpClientSpy.get.and.returnValue(throwError({status: 400}));
-      let actual;
+      let expected = [
+        {categories:[],created_at:"2020-01-05 13:42:26.991637",
+         icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+         id:"0cyirBrJSay5yYEL1yYw_A", 
+         updated_at:"2020-01-05 13:42:26.991637",
+         url:"https://api.chucknorris.io/jokes/0cyirBrJSay5yYEL1yYw_A",
+         value:"In the original making of Scarface when Tony said \"say hello to my little friend\" Chuck Norris appeared. However, the director cut it out said it was too gruesome for a R rated movie."
+        },
+         {categories:[],created_at:"2020-01-05 13:42:30.480041",
+          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+          id:"g96iRXO6TPWAgWkrWf_YRQ",
+          updated_at:"2020-01-05 13:42:30.480041",
+          url:"https://api.chucknorris.io/jokes/g96iRXO6TPWAgWkrWf_YRQ",
+          value:"once upon a time Chuck Norris seen a mime\"hello\" said chuck the mime didnt answer so he round house kicked him to death."
+        }
+      ];
+      httpClientSpy.get.and.returnValue(of({result: expected}));
 
-      // act
-      jokeService.GetJokesBySearch("text").subscribe({
-        next: data => actual = data
-      });
-
-      // assert
-      expect(actual).toEqual(new Array());
+      // act && assert
+      jokeService.GetJokesBySearch('text').subscribe({
+        next: actual => expect(actual).toEqual(expected)
+      })
     })
 
-    it ('should return error after subscribing to it if non 4** error occurs', () => {
+    it ('should return empty array if 4** error occurs', () => {
+      // arrange
+      httpClientSpy.get.and.returnValue(throwError({status: 400}));
+
+      // act && assert
+      jokeService.GetJokesBySearch("text").subscribe({
+        next: actual => expect(actual).toEqual(new Array())
+      });
+    })
+
+    it ('should return error it if non 4** error occurs', () => {
       // arrange
       let expected = {status: 500};
       httpClientSpy.get.and.returnValue(throwError(expected));
-      let actual;
   
-      // act
+      // act && assert
       jokeService.GetJokesBySearch("text").subscribe({
-        error: err => actual = err 
+        error: actual => expect(actual).toEqual(expected)
       })
-  
-      // assert
-      expect(actual).toEqual(expected);
     })
   })
 });
+

@@ -38,7 +38,6 @@ export class JokeService {
     return this.http.get<any>(this.apiJokesBySearch + search).pipe(
       map(jokes => jokes.result),
       catchError(err => {
-        console.log(err);
         if (err.status.toString().startsWith('4')){
           return of([]);
         }
