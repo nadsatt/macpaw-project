@@ -62,7 +62,7 @@ export class AppComponent implements OnInit {
   public GetJokesBySearch(search: string): void {
     this.jokeService.GetJokesBySearch(search).subscribe({
       next: jokes => {
-        this.jokes.unshift(...jokes.result);
+        this.jokes.unshift(...jokes);
       },
       error: err => console.error(err)
     });

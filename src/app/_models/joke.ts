@@ -7,5 +7,5 @@ export class Joke {
     public url: string;
     public value: string;
     public isFavourite?: boolean;
-    public fecthedByCategory?: string;
+    public fetchedByCategory?: string;
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 import { Joke } from '../_models/joke';
 
 @Injectable({
@@ -22,19 +22,13 @@ export class JokeService {
   }
 
   public GetRandomJoke(): Observable<Joke> {
-    return this.http.get<Joke>(this.apiRandomJoke).pipe(
-      map(joke => {
-        joke.isFavourite = false;
-        return joke;
-      })
-    );
+    return this.http.get<Joke>(this.apiRandomJoke);
   }
 
   public GetRandomJokeByCategory(category: string): Observable<Joke> {
     return this.http.get<Joke>(this.apiRandomJokeByCategory + category).pipe(
       map(joke => {
-        joke.isFavourite = false;
-        joke.fecthedByCategory = category;
+        joke.fetchedByCategory = category;
         return joke;
       })
     );
@@ -42,7 +36,16 @@ export class JokeService {
 
   public GetJokesBySearch(search: string): Observable<any> {
     return this.http.get<any>(this.apiJokesBySearch + search).pipe(
-      tap(jokes => jokes.total > 0 ? jokes.result : [])
+      map(jokes => jokes.result),
+      catchError(err => {
+        console.log(err);
+        if (err.status.toString().startsWith('4')){
+          return of([]);
+        }
+        else {
+          return throwError(err);
+        }
+      })
     );
   }
 }
