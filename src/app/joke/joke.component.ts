@@ -18,11 +18,12 @@ export class JokeComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.CalculateLastUpdate();
+    this.lastUpdate = this.CalculateLastUpdate(this.joke.created_at, Date.now());
   }
 
-  private CalculateLastUpdate(): void {
-    this.lastUpdate = this.joke.updated_at ? Math.floor((Date.now() - Date.parse(this.joke.updated_at))/ 3600000): null;
+  public CalculateLastUpdate(creationDate: string, currentDate: number): number {
+    let lastUpdate = Math.floor((currentDate - Date.parse(creationDate))/ 3600000);
+    return lastUpdate;
   }
 
   public Favourite(): void {

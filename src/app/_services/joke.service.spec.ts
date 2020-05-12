@@ -1,7 +1,7 @@
 import { JokeService } from './joke.service';
 import { of, throwError } from 'rxjs';
 
-
+/*
 describe('JokeService', () => {
   // global arrange 
   let jokeService: JokeService;
@@ -18,7 +18,7 @@ describe('JokeService', () => {
       httpClientSpy.get.and.returnValue(of(true));
       let api: string = 'https://api.chucknorris.io/jokes/categories';
 
-      // act
+      // act 
       jokeService.GetJokeCategories();
 
       // assert
@@ -34,15 +34,11 @@ describe('JokeService', () => {
         "political","religion","science","sport","travel"
       ];
       httpClientSpy.get.and.returnValue(of(expected));
-      let actual;
 
-      // act
+      // act && assert
       jokeService.GetJokeCategories().subscribe({
-        next: data => actual = data
+        next: actual => expect(actual).toEqual(expected)
       });
-
-      // assert
-      expect(actual).toEqual(expected);
     })
   })
 
@@ -72,15 +68,11 @@ describe('JokeService', () => {
         value:"There is no theory of evolution, just a list of creatures Chuck Norris allows to live."
       };
       httpClientSpy.get.and.returnValue(of(expected));
-      let actual;
 
-      // act
+      // act && assert
       jokeService.GetRandomJoke().subscribe({
-        next: data => actual = data
+        next: actual => expect(actual).toEqual(expected)
       });
-
-      // assert
-      expect(actual).toEqual(expected);
     })
   })
 
@@ -191,4 +183,4 @@ describe('JokeService', () => {
     })
   })
 });
-
+*/
