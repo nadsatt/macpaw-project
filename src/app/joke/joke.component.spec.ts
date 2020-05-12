@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
 import { JokeComponent } from './joke.component';
 import { By } from '@angular/platform-browser';
 
@@ -205,16 +205,33 @@ describe('JokeComponent', () => {
      expect(fixture.nativeElement.querySelector('.joke__fav-icon--unfavourited')).toBe(null);
    })
 
-   it('should call "Favourite() method after click on empty clickable fav-icon', () => {
+   it('should call "Favourite" method after click on empty clickable fav-icon', () => {
      // arrange
      component.jokeFromFavJokes = false;
      component.joke.isFavourite = false;
      fixture.detectChanges();
 
-     spyOn(component, 'Favourite')
-     let el: HTMLElement = fixture.debugElement.query(By.css('.joke__fav-icon--unfavourited')).nativeElement.click();
-     expect(component.Favourite).toHaveBeenCalled();
+     // act 
+     const onClickMock = spyOn(component, 'Favourite');
+     fixture.debugElement.query(By.css('svg.joke__fav-icon--unfavourited')).triggerEventHandler('click', null);
+     
+     // assert
+     expect(onClickMock).toHaveBeenCalled();
    })
+
+   it('should call "Unfavourite" method after click on filled clickable fav-icon', () => {
+    // arrange
+    component.jokeFromFavJokes = false;
+    component.joke.isFavourite = true;
+    fixture.detectChanges();
+
+    // act 
+    const onClickMock = spyOn(component, 'Unfavourite');
+    fixture.debugElement.query(By.css('svg.joke__fav-icon--favourited')).triggerEventHandler('click', null);
+    
+    // assert
+    expect(onClickMock).toHaveBeenCalled();
+  })
   })
 });
 
