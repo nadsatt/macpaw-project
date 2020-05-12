@@ -18,7 +18,9 @@ export class JokeComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.lastUpdate = this.CalculateLastUpdate(this.joke.created_at, Date.now());
+    if (this.joke) {
+      this.lastUpdate = this.CalculateLastUpdate(this.joke.created_at, Date.now());
+    }
   }
 
   public CalculateLastUpdate(creationDate: string, currentDate: number): number {

@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JokeComponent } from './joke.component';
-import { JokeService } from '../_services/joke.service';
+import { By } from '@angular/platform-browser';
 
 describe('JokeComponent', () => {
   let component: JokeComponent;
@@ -16,7 +16,6 @@ describe('JokeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(JokeComponent);
     component = fixture.componentInstance;
-
     component.joke = {
       categories:[],
       created_at:"2020-01-05 13:42:21.179347",
@@ -40,7 +39,7 @@ describe('JokeComponent', () => {
     component.ngOnInit();
 
     // assert
-    expect(component.lastUpdate).toBeDefined;
+    expect(component.lastUpdate).toBeInstanceOf(Number);
   })
 
   describe('CalculateLastUpdate', () => {
@@ -62,12 +61,13 @@ describe('JokeComponent', () => {
     it ('should modify "isFavourite" jokes property to true', () => {
       // arrange
       component.joke.isFavourite = false;
+      fixture.detectChanges();
 
       // act
       component.Favourite();
 
       // assert
-      expect(component.joke.isFavourite).toBeTrue;
+      expect(component.joke.isFavourite).toBe(true);
     })
 
     it ('should emit "jokeFavourited" event with joke', () => {
@@ -88,12 +88,13 @@ describe('JokeComponent', () => {
     it ('should modify "isFavourite" jokes property to false', () => {
       // arrange
       component.joke.isFavourite = true;
+      fixture.detectChanges();
       
       // act
       component.Unfavourite();
 
       // assert
-      expect(component.joke.isFavourite).toBeFalse;
+      expect(component.joke.isFavourite).toBe(false);
     })
 
     it ('should emit "jokeUnfavourited" event with joke', () => {
@@ -108,6 +109,112 @@ describe('JokeComponent', () => {
       // assert
       expect(actual).toEqual(component.joke);
     })
+  })
+
+  describe('template', () => {
+    it ('should not render if "joke" var undefined', () => {
+      // arrange && act
+      component.joke = null;
+      fixture.detectChanges();
+
+      // assert
+      expect(fixture.nativeElement.querySelector('.joke')).toBe(null);
+    })
+
+    it ('should render if "joke" var defined', () => {
+      // assert
+      expect(fixture.nativeElement).toBeInstanceOf(HTMLDivElement);
+      expect(fixture.nativeElement.querySelector('.joke__link-content').textContent).toContain(component.joke.id);
+      expect(fixture.debugElement.query(By.css('.joke__link-content a')).nativeElement.getAttribute('href')).toEqual(component.joke.url);
+      expect(fixture.nativeElement.querySelector('.joke__value').textContent).toContain(component.joke.value);
+      expect(fixture.nativeElement.querySelector('.joke__last-update').textContent).toContain(component.lastUpdate);
+    })
+
+    it('should render category if joke is from search jokes && fetched by category', () => {
+      // arrange && act
+      component.jokeFromFavJokes = false;
+      component.joke.isFavourite = false;
+      component.joke.fetchedByCategory = 'any';
+      fixture.detectChanges();
+
+      // assert
+      expect(fixture.nativeElement.querySelector('.joke__category').textContent).toContain(component.joke.fetchedByCategory);
+    })
+
+    it('should not render category if joke is from fav jokes', () => {
+      // arrange && act
+      component.jokeFromFavJokes = true;
+      component.joke.isFavourite = true;
+      component.joke.fetchedByCategory = "any";
+      fixture.detectChanges();
+
+      // assert
+      expect(fixture.nativeElement.querySelector('.joke__category')).toBe(null);
+    })
+
+   it('should not render category if joke is not fetched by category', () => {
+    // arrange && act
+    component.jokeFromFavJokes = false;
+    component.joke.fetchedByCategory = undefined;
+    fixture.detectChanges();
+
+    // assert
+    expect(fixture.nativeElement.querySelector('.joke__category')).toBe(null);
+   })
+
+   it('should render static fav-icon if joke from fav jokes', () => {
+    // arrange && act
+    component.jokeFromFavJokes = true;
+    component.joke.isFavourite = true;
+    fixture.detectChanges();
+
+    // assert
+    expect(fixture.nativeElement.querySelector('.fav-joke__fav-icon')).toBeInstanceOf(HTMLDivElement);
+    expect(fixture.nativeElement.querySelector('.search-joke__fav-icon')).toBe(null);
+   })
+
+   it('should render clickable fav-icon if joke from search jokes', () => {
+    // arrange && act
+    component.jokeFromFavJokes = false;
+    fixture.detectChanges();
+
+    // assert
+    expect(fixture.nativeElement.querySelector('.search-joke__fav-icon')).toBeInstanceOf(HTMLDivElement);
+    expect(fixture.nativeElement.querySelector('.fav-joke__fav-icon')).toBe(null);
+   })
+  
+   it('should render empty clickable fav-icon if joke from search jokes is unfavourited', () => {
+    // arrange && act
+    component.jokeFromFavJokes = false;
+    component.joke.isFavourite = false;
+    fixture.detectChanges();
+ 
+     // assert
+     expect(fixture.nativeElement.querySelector('.joke__fav-icon--unfavourited')).toBeInstanceOf(SVGElement);
+     expect(fixture.nativeElement.querySelector('.joke__fav-icon--favourited')).toBe(null);
+   })
+
+   it('should render filled clickable fav-icon if joke from search jokes is favourited', () => {
+    // arrange && act
+    component.jokeFromFavJokes = false;
+    component.joke.isFavourite = true;
+    fixture.detectChanges();
+ 
+     // assert
+     expect(fixture.nativeElement.querySelector('.joke__fav-icon--favourited')).toBeInstanceOf(SVGElement);
+     expect(fixture.nativeElement.querySelector('.joke__fav-icon--unfavourited')).toBe(null);
+   })
+
+   it('should call "Favourite() method after click on empty clickable fav-icon', () => {
+     // arrange
+     component.jokeFromFavJokes = false;
+     component.joke.isFavourite = false;
+     fixture.detectChanges();
+
+     spyOn(component, 'Favourite')
+     let el: HTMLElement = fixture.debugElement.query(By.css('.joke__fav-icon--unfavourited')).nativeElement.click();
+     expect(component.Favourite).toHaveBeenCalled();
+   })
   })
 });
 
