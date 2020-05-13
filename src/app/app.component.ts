@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
 
   get sessionFavJokes(): Joke[] {
     let favJokes = [];
-    if (sessionStorage.length > 0) {
+    if (sessionStorage.getItem('favJokes')) {
       let sessionFavJokes = JSON.parse(sessionStorage.getItem('favJokes'));
       favJokes = Object.values(sessionFavJokes);
     }

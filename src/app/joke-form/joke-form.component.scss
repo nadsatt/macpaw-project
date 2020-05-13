@@ -74,4 +74,7 @@
         padding: 10px 40px;
         word-break: keep-all;
     }
+    .joke-form__button:disabled {
+        background: linear-gradient(92.01deg, rgb(168, 187, 255) 0%, rgb(155, 176, 253) 100%);
+    }
 }

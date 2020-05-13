@@ -2,6 +2,7 @@ import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core
 import { JokeComponent } from './joke.component';
 import { By } from '@angular/platform-browser';
 
+/*
 describe('JokeComponent', () => {
   let component: JokeComponent;
   let fixture: ComponentFixture<JokeComponent>;
@@ -234,4 +235,4 @@ describe('JokeComponent', () => {
   })
   })
 });
-
+*/
