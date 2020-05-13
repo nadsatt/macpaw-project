@@ -2,6 +2,7 @@ import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { JokeService } from './_services/joke.service';
 import { Joke } from './_models/joke';
+import { of, Observable } from 'rxjs';
 
 describe('AppComponent', () => {
   let component: AppComponent;
@@ -9,17 +10,21 @@ describe('AppComponent', () => {
   let jokeServiceSpy: { 
     'GetJokeCategories', 
     'GetRandomJoke',
-    'GetJokeByCategory',
+    'GetRandomJokeByCategory',
     'GetJokesBySearch': jasmine.Spy 
   };
   let getterSpy: jasmine.Spy;
   let setterSpy: jasmine.Spy;
+  let joke;
+  let jokes;
+  let GetSessionFavJokes;
+  let SetSessionFavJokes;
 
   beforeEach(async(() => {
     jokeServiceSpy = jasmine.createSpyObj('JokeService', [
       'GetJokeCategories', 
       'GetRandomJoke',
-      'GetJokeByCategory',
+      'GetRandomJokeByCategory',
       'GetJokesBySearch'
     ]);
     TestBed.configureTestingModule({
@@ -78,7 +83,7 @@ describe('AppComponent', () => {
 
     it('should initialize "favJokes" array as non-epmty if session storage non-empty', () => {
       // arrange
-      let joke = {
+      joke = {
         categories:[],
         created_at:"2020-01-05 13:42:21.179347",
         icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
@@ -109,34 +114,31 @@ describe('AppComponent', () => {
     // due to inability to mock 'sessionStorage' variable in getter,
     // getter's code tested here as function
     beforeEach(() => {
-      let storage: Object = {};
-
-      spyOn(sessionStorage, 'setItem').and.callFake((key: string, value: string) => {
-        storage[key] = value;
-      });
-
-      spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
-        return storage[key] || "{}";
-      });
-
-      spyOn(sessionStorage, 'clear').and.callFake(() => {
-        storage = {};
-      });
-
-      spyOnProperty(sessionStorage, 'length').and.returnValue(Object.keys(storage) ? 1 : 0);
-    })
-
-    it('should return array of jokes if session storage containes jokes', () => {
-      // arrange
-      let GetSessionFavJokes = (): Joke[] => {
+      GetSessionFavJokes = (): Joke[] => {
         let favJokes = [];
         if (sessionStorage.getItem('favJokes')) {
           let sessionFavJokes = JSON.parse(sessionStorage.getItem('favJokes'));
           favJokes = Object.values(sessionFavJokes);
         }
         return favJokes;
-      }
-      let joke = {
+      }  
+
+      let storage: Object = {};
+      spyOn(sessionStorage, 'setItem').and.callFake((key: string, value: string) => {
+        storage[key] = value;
+      });
+      spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
+        return storage[key] || "{}";
+      });
+      spyOn(sessionStorage, 'clear').and.callFake(() => {
+        storage = {};
+      });
+      spyOnProperty(sessionStorage, 'length').and.returnValue(Object.keys(storage) ? 1 : 0);
+    })
+
+    it('should return array of jokes if session storage containes jokes', () => {
+      // arrange
+      joke = {
         categories:[],
         created_at:"2020-01-05 13:42:21.179347",
         icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
@@ -157,14 +159,6 @@ describe('AppComponent', () => {
 
     it('should return empty array if session storage doesnt contain jokes', () => {
       // arrange
-      let GetSessionFavJokes = (): Joke[] => {
-        let favJokes = [];
-        if (sessionStorage.getItem('favJokes')) {
-          let sessionFavJokes = JSON.parse(sessionStorage.getItem('favJokes'));
-          favJokes = Object.values(sessionFavJokes);
-        }
-        return favJokes;
-      }
       sessionStorage.clear();
 
       // act
@@ -179,26 +173,7 @@ describe('AppComponent', () => {
     // due to inability to mock 'sessionStorage' variable in setter,
     // setter's code tested here as function
     beforeEach(() => {
-      let storage: Object = {};
-
-      spyOn(sessionStorage, 'setItem').and.callFake((key: string, value: string) => {
-        storage[key] = value;
-      });
-
-      spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
-        return storage[key] || "{}";
-      });
-
-      spyOn(sessionStorage, 'clear').and.callFake(() => {
-        storage = {};
-      });
-
-      spyOnProperty(sessionStorage, 'length').and.returnValue(Object.keys(storage) ? 1 : 0);
-    })
-
-    it('should create object of joke in session storage if input array contains joke', () => {
-      // arrange
-      let SetSessionFavJokes = (favJokes: Joke[]) => {
+      SetSessionFavJokes = (favJokes: Joke[]) => {
         let updFavJokes = {};
         if (favJokes.length > 0) {
           for (let favJoke of favJokes) {
@@ -207,7 +182,23 @@ describe('AppComponent', () => {
         }
         sessionStorage.setItem('favJokes', JSON.stringify(updFavJokes));
       }
-      let joke = {
+
+      let storage: Object = {};
+      spyOn(sessionStorage, 'setItem').and.callFake((key: string, value: string) => {
+        storage[key] = value;
+      });
+      spyOn(sessionStorage, 'getItem').and.callFake((key: string) => {
+        return storage[key] || "{}";
+      });
+      spyOn(sessionStorage, 'clear').and.callFake(() => {
+        storage = {};
+      });
+      spyOnProperty(sessionStorage, 'length').and.returnValue(Object.keys(storage) ? 1 : 0);
+    })
+
+    it('should create object of joke in session storage if input array contains joke', () => {
+      // arrange
+      joke = {
         categories:[],
         created_at:"2020-01-05 13:42:21.179347",
         icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
@@ -228,15 +219,6 @@ describe('AppComponent', () => {
 
     it('should create empty object of joke in session storage if input array is empty', () => {
       // arrange
-      let SetSessionFavJokes = (favJokes: Joke[]) => {
-        let updFavJokes = {};
-        if (favJokes.length > 0) {
-          for (let favJoke of favJokes) {
-            updFavJokes[favJoke.id] = favJoke;
-          }
-        }
-        sessionStorage.setItem('favJokes', JSON.stringify(updFavJokes));
-      }
       sessionStorage.clear();
 
       // act
@@ -249,7 +231,154 @@ describe('AppComponent', () => {
   })
 
   describe('GetJokeByRandom', () => {
+    beforeEach(() => {
+      joke = {
+        categories:[],
+        created_at:"2020-01-05 13:42:21.179347",
+        icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+        id:"JGvnB9CIQd2OdkUtqC0sqg",
+        updated_at:"2020-01-05 13:42:21.179347",
+        url:"https://api.chucknorris.io/jokes/JGvnB9CIQd2OdkUtqC0sqg",
+        value:"When Chuck Norris eats pussy its cannibalism"
+      };
+      jokeServiceSpy.GetRandomJoke.and.returnValue(new Observable((observer) => {
+        observer.next(joke);
+      }));
+      fixture.detectChanges();
+    })
+
+    it('should add joke to "jokes" array', () => {
+      // act
+      component.GetJokeByRandom();
+
+      // assert
+      expect(jokeServiceSpy.GetRandomJoke).toHaveBeenCalled();
+      expect(component.jokes).toContain(joke);
+      expect(component.jokes.length).toEqual(1);
+    })
+
+    it('should add joke at the beginning of "jokes" array', () => {
+      // arrange
+      component.jokes = [{ categories:[],
+          created_at:"2020-01-05 13:42:24.142371",
+          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+          id:"6_MNkQ-JTKq3tS-Gx4H6Cg",
+          updated_at:"2020-01-05 13:42:24.142371",
+          url:"https://api.chucknorris.io/jokes/6_MNkQ-JTKq3tS-Gx4H6Cg",
+          value:"Chuck Norris went back in time and punched Moses in the face, just to prove that he could do it."
+      }];
+
+      // act
+      component.GetJokeByRandom();
+
+      // assert
+      expect(component.jokes.length).toEqual(2);
+      expect(component.jokes[0].id).toEqual(joke.id);
+    })
+  })
+
+  describe('GetJokeByCategory', () => {
+    beforeEach(() => {
+      joke = {
+        categories:[],
+        created_at:"2020-01-05 13:42:21.179347",
+        icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+        id:"JGvnB9CIQd2OdkUtqC0sqg",
+        updated_at:"2020-01-05 13:42:21.179347",
+        url:"https://api.chucknorris.io/jokes/JGvnB9CIQd2OdkUtqC0sqg",
+        value:"When Chuck Norris eats pussy its cannibalism"
+      };
+      jokeServiceSpy.GetRandomJokeByCategory.and.returnValue(new Observable((observer) => {
+        observer.next(joke);
+      }));
+      fixture.detectChanges();
+    })
+
+    it('should add joke to "jokes" array', () => {
+      component.GetJokeByCategory("any");
+
+      // assert
+      expect(jokeServiceSpy.GetRandomJokeByCategory).toHaveBeenCalled();
+      expect(component.jokes).toContain(joke);
+      expect(component.jokes.length).toEqual(1);
+    })
+
+    it('should add joke at the beginning of "jokes" array', () => {
+      // arrange
+      component.jokes = [
+        { categories:[],
+          created_at:"2020-01-05 13:42:24.142371",
+          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+          id:"6_MNkQ-JTKq3tS-Gx4H6Cg",
+          updated_at:"2020-01-05 13:42:24.142371",
+          url:"https://api.chucknorris.io/jokes/6_MNkQ-JTKq3tS-Gx4H6Cg",
+          value:"Chuck Norris went back in time and punched Moses in the face, just to prove that he could do it." }
+      ];
+  
+      // act
+      component.GetJokeByCategory("any");
+  
+      // assert
+      expect(component.jokes.length).toEqual(2);
+      expect(component.jokes[0].id).toEqual(joke.id);
+    })
+  })
+
+  describe('GetJokesBySearch', () => {
+    beforeEach(() => {
+      jokes = [
+        { categories:[],
+          created_at:"2020-01-05 13:42:21.179347",
+          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+          id:"JGvnB9CIQd2OdkUtqC0sqg",
+          updated_at:"2020-01-05 13:42:21.179347",
+          url:"https://api.chucknorris.io/jokes/JGvnB9CIQd2OdkUtqC0sqg",
+          value:"When Chuck Norris eats pussy its cannibalism" },
+        { categories:[],
+          created_at:"2020-01-05 13:42:27.496799",
+          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+          id:"4Vl6P5quQPe7o6pXiITKag",
+          updated_at:"2020-01-05 13:42:27.496799",
+          url:"https://api.chucknorris.io/jokes/4Vl6P5quQPe7o6pXiITKag",
+          value:"Chuck Norris made the Kessel run in less than three parsecs." }
+      ];
+      jokeServiceSpy.GetJokesBySearch.and.returnValue(new Observable((observer) => {
+        observer.next(jokes);
+      }));
+      fixture.detectChanges();
+    })
+
+    it('should add jokes to "jokes" array', () => {
+      // act
+      component.GetJokesBySearch('any');
+
+      // assert
+      expect(jokeServiceSpy.GetJokesBySearch).toHaveBeenCalled();
+      expect(component.jokes.length).toEqual(2);
+      expect(component.jokes).toContain(jokes[0]);
+      expect(component.jokes).toContain(jokes[1]);
+    })
+
+    it('should add jokes to the beginning of "jokes" array', () => {
+      // assert
+      let jokeId = "6_MNkQ-JTKq3tS-Gx4H6Cg";
+      component.jokes = [
+        { categories:[],
+          created_at:"2020-01-05 13:42:24.142371",
+          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+          id:jokeId,
+          updated_at:"2020-01-05 13:42:24.142371",
+          url:"https://api.chucknorris.io/jokes/6_MNkQ-JTKq3tS-Gx4H6Cg",
+          value:"Chuck Norris went back in time and punched Moses in the face, just to prove that he could do it." }
+      ];
     
+      // act
+      component.GetJokesBySearch('any');
+
+      // assert
+      expect(component.jokes.length).toEqual(3);
+      expect(component.jokes[2].id).toEqual(jokeId);
+    })
   })
 });
 
