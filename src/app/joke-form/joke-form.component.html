@@ -41,8 +41,8 @@
     </div>
   </mat-radio-group>
   <button class="joke-form__button"
-          [disabled]="disabled"
-          (click)="EmitGetJokeEvent()">
+          [disabled]="submitDisabled"
+          (click)="GetJoke()">
           Get a joke
   </button>
 </form>

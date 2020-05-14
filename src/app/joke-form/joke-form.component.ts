@@ -1,6 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { JokeService } from '../_services/joke.service';
+import { SearchJokesService } from '../_services/search-jokes.service';
 
 @Component({
   selector: 'app-joke-form',
@@ -19,16 +20,13 @@ export class JokeFormComponent implements OnInit {
   get categoryVal(): string {
     return this.jokeForm.get('category').value;
   }
-  get disabled(): boolean {
+  get submitDisabled(): boolean {
     return this.jokeForm.get('getJokeBy').value === 'getJokeBySearch' 
       && !this.jokeForm.get('search').value;
   }
 
-  @Output() getJokeByRandom = new EventEmitter();
-  @Output() getJokeByCategory = new EventEmitter<string>();
-  @Output() getJokeBySearch = new EventEmitter<string>();
-
   constructor(private jokeService: JokeService,
+    private searchJokesService: SearchJokesService,
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -54,17 +52,38 @@ export class JokeFormComponent implements OnInit {
     this.jokeForm.patchValue({'category': category});
   }
 
-  EmitGetJokeEvent(): void {
+  GetJoke(): void {
     if (this.jokeForm.get('getJokeBy').value === 'getJokeByRandom') {
-      this.getJokeByRandom.emit();
+      this.GetJokeByRandom();
     }
     else if (this.jokeForm.get('getJokeBy').value === 'getJokeByCategory') {
       let category = this.jokeForm.get('category').value;
-      this.getJokeByCategory.emit(category);
+      this.GetJokeByCategory(category);
     }
     else {
       let search = this.jokeForm.get('search').value;
-      this.getJokeBySearch.emit(search);
+      this.GetJokesBySearch(search);
     }
+  }
+
+  GetJokeByRandom(): void {
+    this.jokeService.GetRandomJoke().subscribe({
+      next: joke => this.searchJokesService.UpdateJokes(joke),
+      error: message => console.log(message)
+    });
+  }
+
+  GetJokeByCategory(category: string): void {
+    this.jokeService.GetRandomJokeByCategory(category).subscribe({
+      next: joke => this.searchJokesService.UpdateJokes(joke),
+      error: message => console.log(message)
+    });
+  }
+
+  GetJokesBySearch(search: string): void {
+    this.jokeService.GetJokesBySearch(search).subscribe({
+      next: jokes => this.searchJokesService.UpdateJokes(...jokes),
+      error: message => console.log(message)
+    });
   }
 }

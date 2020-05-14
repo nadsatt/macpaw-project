@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SesssionStorageService } from './sesssion-storage.service';
+import { FavJokesService } from './fav-jokes.service';
 
 describe('SesssionStorageService', () => {
-  let service: SesssionStorageService;
+  let service: FavJokesService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SesssionStorageService);
+    service = TestBed.inject(FavJokesService);
   });
 
   it('should be created', () => {

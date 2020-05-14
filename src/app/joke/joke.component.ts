@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Joke } from '../_models/joke';
+import { FavJokesService } from '../_services/fav-jokes.service';
 
 @Component({
   selector: 'app-joke',
@@ -11,11 +12,9 @@ export class JokeComponent implements OnInit {
 
   @Input() joke: Joke;
   @Input() jokeFromFavJokes: boolean;
-  @Output() jokeFavourited: EventEmitter<Joke> = new EventEmitter<Joke>();
-  @Output() jokeUnfavourited: EventEmitter<Joke> = new EventEmitter<Joke>();
   lastUpdate: number;
 
-  constructor() { }
+  constructor(private favJokesService: FavJokesService) { }
 
   ngOnInit(): void {
     if (this.joke) {
@@ -30,11 +29,11 @@ export class JokeComponent implements OnInit {
 
   Favourite(): void {
     this.joke.isFavourite = true;
-    this.jokeFavourited.emit(this.joke);
+    this.favJokesService.AddFavJoke(this.joke);
   }
 
   Unfavourite(): void {
     this.joke.isFavourite = false;
-    this.jokeUnfavourited.emit(this.joke);
+    this.favJokesService.RemoveFavJoke(this.joke);
   }
 }

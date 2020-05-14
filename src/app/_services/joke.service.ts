@@ -51,10 +51,8 @@ export class JokeService {
   HandleError(err) {
     let errorMessage = '';
     if (err.error instanceof ErrorEvent) {
-      // client-side error
       errorMessage = `Error: ${err.error.message}`;
     } else {
-      // server-side error
       errorMessage = `Error Code: ${err.status}\nMessage: ${err.message}`;
     }
     return throwError(errorMessage);

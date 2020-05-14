@@ -1,0 +1,72 @@
+@media screen and (max-width:767px) {
+    .search-jokes-header {
+        display: flex;
+        justify-content: space-between;
+        font-style: normal;
+        .search-jokes-header__text {
+            width: 87px;
+            height: 28px;
+            line-height: 28px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .search-jokes-header__icon {
+            display: flex;
+            align-items: center;
+            svg {
+                margin-right: 10px;
+            }
+            span {
+                width: 84px;
+                font-weight: 500;
+                font-size: 20px;
+                line-height: 28px;
+                color: #ABABAB;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1439px) {
+    .search-jokes-header {
+        display: flex;
+        justify-content: space-between;
+        font-style: normal;
+        .search-jokes-header__text {
+            width: 87px;
+            height: 28px;
+            line-height: 28px;
+            font-size: 20px;
+            font-weight: bold; 
+        }
+        .search-jokes-header__icon {
+            display: flex;
+            align-items: center;
+            svg {
+                margin-right: 10px;
+            }
+            span {
+                width: 84px;
+                line-height: 28px;
+                font-size: 20px;
+                font-weight: 500;
+                color: #ABABAB;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .search-jokes-header {
+        .search-jokes-header__text {
+            width: 87px;
+            height: 28px;
+            line-height: 28px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .search-jokes-header__icon {
+            display: none;
+        }
+    }
+}

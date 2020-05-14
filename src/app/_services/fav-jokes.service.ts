@@ -1,13 +1,30 @@
 import { Injectable } from '@angular/core';
 import { Joke } from '../_models/joke';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class SesssionStorageService {
+export class FavJokesService {
 
-  GetFavJokes(): Joke[] {
+  private favJokesSource = new BehaviorSubject<Joke[]>(this.GetFavJokes()); 
+  currentFavJokes = this.favJokesSource.asObservable();
+
+  private _showFavJokes: boolean = false;
+  get showFavJokes(): boolean {
+    return this._showFavJokes;
+  }
+
+  ShowFavJokes(): void {
+    this._showFavJokes = true;
+  }
+
+  HideFavJokes(): void {
+    this._showFavJokes = false;
+  }
+
+  private GetFavJokes(): Joke[] {
     let favJokes = [];
     if (sessionStorage.getItem('favJokes')) {
       let sessionFavJokes = JSON.parse(sessionStorage.getItem('favJokes'));
@@ -16,7 +33,7 @@ export class SesssionStorageService {
     return favJokes;
   }
   
-  SetFavJokes(favJokes: Joke[]) {
+  private SetFavJokes(favJokes: Joke[]) {
     let updFavJokes = {};
     if (favJokes.length > 0) {
       for (let favJoke of favJokes) {
@@ -30,11 +47,15 @@ export class SesssionStorageService {
     let favJokes = this.GetFavJokes();
     favJokes.unshift(favJoke);
     this.SetFavJokes(favJokes);
+
+    this.favJokesSource.next(this.GetFavJokes());
   }
 
   RemoveFavJoke(unfavJoke: Joke): void {
     let favJokes = this.GetFavJokes();
     favJokes = favJokes.filter(joke => joke.id !== unfavJoke.id);
     this.SetFavJokes(favJokes);
+
+    this.favJokesSource.next(this.GetFavJokes());
   }
 }

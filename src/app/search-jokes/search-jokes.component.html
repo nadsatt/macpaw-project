@@ -1,0 +1,9 @@
+<app-joke-form></app-joke-form>
+<div class="search-jokes__list" 
+     *ngIf="jokes && jokes.length > 0">
+     <app-joke class="joke" 
+               *ngFor="let joke of jokes" 
+               [joke]="joke"
+               [jokeFromFavJokes]=false>
+     </app-joke>
+</div>
