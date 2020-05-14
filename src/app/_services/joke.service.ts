@@ -10,41 +10,53 @@ import { Joke } from '../_models/joke';
 
 export class JokeService {
 
-  private apiJokeCategories: string = 'https://api.chucknorris.io/jokes/categories';
-  private apiRandomJoke: string = 'https://api.chucknorris.io/jokes/random';
-  private apiRandomJokeByCategory = 'https://api.chucknorris.io/jokes/random?category=';
-  private apiJokesBySearch = 'https://api.chucknorris.io/jokes/search?query=';
+  private api = 'https://api.chucknorris.io/jokes/';
 
   constructor(private http: HttpClient) { }
 
-  public GetJokeCategories(): Observable<string[]> {
-    return this.http.get<string[]>(this.apiJokeCategories);
+  GetJokeCategories(): Observable<string[]> {
+    return this.http.get<string[]>(this.api + 'categories');
   }
 
-  public GetRandomJoke(): Observable<Joke> {
-    return this.http.get<Joke>(this.apiRandomJoke);
+  GetRandomJoke(): Observable<Joke> {
+    return this.http.get<Joke>(this.api + 'random').pipe(
+      catchError(err => this.HandleError(err))
+    );
   }
 
-  public GetRandomJokeByCategory(category: string): Observable<Joke> {
-    return this.http.get<Joke>(this.apiRandomJokeByCategory + category).pipe(
+  GetRandomJokeByCategory(category: string): Observable<Joke> {
+    return this.http.get<Joke>(this.api + 'random?category=' + category).pipe(
       map(joke => {
         joke.fetchedByCategory = category;
         return joke;
+      }),
+      catchError(err => this.HandleError(err))
+    );
+  }
+
+  GetJokesBySearch(search: string): Observable<any> {
+    return this.http.get<any>(this.api + 'search?query=' + search).pipe(
+      map(jokes => jokes.result),
+      catchError(err => {
+        if (err.status === 400) {
+          return of([]);
+        }
+        else {
+          this.HandleError(err)
+        }
       })
     );
   }
 
-  public GetJokesBySearch(search: string): Observable<any> {
-    return this.http.get<any>(this.apiJokesBySearch + search).pipe(
-      map(jokes => jokes.result),
-      catchError(err => {
-        if (err.status.toString().startsWith('4')){
-          return of([]);
-        }
-        else {
-          return throwError(err);
-        }
-      })
-    );
+  HandleError(err) {
+    let errorMessage = '';
+    if (err.error instanceof ErrorEvent) {
+      // client-side error
+      errorMessage = `Error: ${err.error.message}`;
+    } else {
+      // server-side error
+      errorMessage = `Error Code: ${err.status}\nMessage: ${err.message}`;
+    }
+    return throwError(errorMessage);
   }
 }

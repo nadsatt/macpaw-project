@@ -9,11 +9,11 @@ import { Joke } from '../_models/joke';
 
 export class JokeComponent implements OnInit {
 
-  @Input() public joke: Joke;
-  @Input() public jokeFromFavJokes: boolean;
-  @Output() public jokeFavourited: EventEmitter<Joke> = new EventEmitter<Joke>();
-  @Output() public jokeUnfavourited: EventEmitter<Joke> = new EventEmitter<Joke>();
-  public lastUpdate: number;
+  @Input() joke: Joke;
+  @Input() jokeFromFavJokes: boolean;
+  @Output() jokeFavourited: EventEmitter<Joke> = new EventEmitter<Joke>();
+  @Output() jokeUnfavourited: EventEmitter<Joke> = new EventEmitter<Joke>();
+  lastUpdate: number;
 
   constructor() { }
 
@@ -23,17 +23,17 @@ export class JokeComponent implements OnInit {
     }
   }
 
-  public CalculateLastUpdate(creationDate: string, currentDate: number): number {
+  CalculateLastUpdate(creationDate: string, currentDate: number): number {
     let lastUpdate = Math.floor((currentDate - Date.parse(creationDate))/ 3600000);
     return lastUpdate;
   }
 
-  public Favourite(): void {
+  Favourite(): void {
     this.joke.isFavourite = true;
     this.jokeFavourited.emit(this.joke);
   }
 
-  public Unfavourite(): void {
+  Unfavourite(): void {
     this.joke.isFavourite = false;
     this.jokeUnfavourited.emit(this.joke);
   }

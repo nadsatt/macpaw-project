@@ -17,10 +17,9 @@
                         From categories
       </mat-radio-button>
       <div class="joke-form__category-group"
-           *ngIf="jokeForm.get('getJokeBy').value === 'getJokeByCategory'"> 
+           *ngIf="getJokeByVal === 'getJokeByCategory'"> 
         <button class="joke-form__category-button"
-                [ngClass]="{'joke-form__category-button--selected': 
-                             jokeForm.get('category').value === category}"
+                [ngClass]="{'joke-form__category-button--selected': categoryVal === category}"
                 *ngFor="let category of categories"
                 (click)="SelectCategory(category)">
                 {{category}}
@@ -33,17 +32,16 @@
                         value="getJokeBySearch">
                         Search
       </mat-radio-button>
-      <textarea class="joke-form__search-field" 
-                *ngIf="jokeForm.get('getJokeBy').value === 'getJokeBySearch'"
+      <input class="joke-form__search-field" 
+                *ngIf="getJokeByVal === 'getJokeBySearch'"
                 formControlName="search" 
                 matInput 
-                placeholder="Free text search...">
-      </textarea>
+                placeholder="Free text search..."
+                autocomplete="off">
     </div>
   </mat-radio-group>
   <button class="joke-form__button"
-          [disabled]="jokeForm.get('getJokeBy').value === 'getJokeBySearch' 
-                      && !jokeForm.get('search').value"
+          [disabled]="disabled"
           (click)="EmitGetJokeEvent()">
           Get a joke
   </button>

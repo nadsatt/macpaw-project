@@ -10,11 +10,23 @@ import { JokeService } from '../_services/joke.service';
 
 export class JokeFormComponent implements OnInit {
 
-  public categories: string[];
-  public jokeForm: FormGroup;
-  @Output() public getJokeByRandom = new EventEmitter();
-  @Output() public getJokeByCategory = new EventEmitter<string>();
-  @Output() public getJokeBySearch = new EventEmitter<string>();
+  categories: string[];
+  jokeForm: FormGroup;
+
+  get getJokeByVal(): string {
+    return this.jokeForm.get('getJokeBy').value;
+  }
+  get categoryVal(): string {
+    return this.jokeForm.get('category').value;
+  }
+  get disabled(): boolean {
+    return this.jokeForm.get('getJokeBy').value === 'getJokeBySearch' 
+      && !this.jokeForm.get('search').value;
+  }
+
+  @Output() getJokeByRandom = new EventEmitter();
+  @Output() getJokeByCategory = new EventEmitter<string>();
+  @Output() getJokeBySearch = new EventEmitter<string>();
 
   constructor(private jokeService: JokeService,
     private fb: FormBuilder) { }
@@ -29,7 +41,7 @@ export class JokeFormComponent implements OnInit {
     });
   }
 
-  public GetJokeCategories(): void {
+  GetJokeCategories(): void {
     this.jokeService.GetJokeCategories().subscribe({
       next: categories => {
         this.categories = categories;
@@ -38,11 +50,11 @@ export class JokeFormComponent implements OnInit {
     });
   }
 
-  public SelectCategory(category: string): void {
+  SelectCategory(category: string): void {
     this.jokeForm.patchValue({'category': category});
   }
 
-  public EmitGetJokeEvent(): void {
+  EmitGetJokeEvent(): void {
     if (this.jokeForm.get('getJokeBy').value === 'getJokeByRandom') {
       this.getJokeByRandom.emit();
     }
