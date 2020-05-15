@@ -10,10 +10,15 @@ export class SearchJokesService {
 
   private jokesSource = new BehaviorSubject<Joke[]>([]); 
   currentJokes = this.jokesSource.asObservable();
-  
-  UpdateJokes(...jokes: Joke[]) {
-    let updJokes = this.jokesSource.value;
-    updJokes.unshift(...jokes)
+    
+  private PushUpdatedJokes(updJokes: Joke[]): void {
     this.jokesSource.next(updJokes);
+  }
+
+  UpdateJokes(...newJokes: Joke[]) {
+    let jokes = this.jokesSource.value;
+    jokes.unshift(...newJokes)
+    
+    this.PushUpdatedJokes(jokes);
   }
 }
