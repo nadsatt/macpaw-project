@@ -4,12 +4,12 @@
     .joke-form__radio-group {
         .joke-form__radio {
             height: 26px;
+            line-height: 26px;
             display: block;
             margin-top: 10px;
             font-size: 18px;
-            color: #333333;
             font-weight: normal;
-            line-height: 26px;
+            color: #333333;
         }
         ::ng-deep {
             .mat-radio-label-content {

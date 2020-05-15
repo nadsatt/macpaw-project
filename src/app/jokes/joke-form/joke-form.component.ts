@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { JokeService } from '../_services/joke.service';
-import { SearchJokesService } from '../_services/search-jokes.service';
+import { JokeService } from '../../_services/joke.service';
+import { SearchJokesService } from '../../_services/search-jokes.service';
 
 @Component({
   selector: 'app-joke-form',

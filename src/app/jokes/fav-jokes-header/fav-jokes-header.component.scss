@@ -1,0 +1,31 @@
+.fav-jokes-header {
+    margin-bottom: 20px;
+    .fav-jokes-header__text {
+        width: 84px;
+        height: 28px;
+        line-height: 28px;
+        font-size: 20px;
+        font-weight: 500;
+        font-style: normal;
+        color: #ABABAB;
+    }
+}
+
+@media screen and (max-width:1439px) {
+    .fav-jokes-header {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        .fav-jokes-header__icon {
+            margin-right: 10px;
+        }
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .fav-jokes-header {
+        .fav-jokes-header__icon {
+            display: none;
+        }
+    }
+}

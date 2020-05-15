@@ -4,7 +4,7 @@ import { JokeService } from './_services/joke.service';
 import { Joke } from './_models/joke';
 import { of, Observable } from 'rxjs';
 
-describe('AppComponent', () => {
+xdescribe('AppComponent', () => {
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>
   let jokeServiceSpy: { 

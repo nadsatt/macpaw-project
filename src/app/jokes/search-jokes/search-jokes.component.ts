@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Joke } from '../_models/joke';
-import { SearchJokesService } from '../_services/search-jokes.service';
+import { Joke } from '../../_models/joke';
+import { SearchJokesService } from '../../_services/search-jokes.service';
 
 @Component({
   selector: 'app-search-jokes',

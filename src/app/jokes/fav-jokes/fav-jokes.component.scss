@@ -23,8 +23,8 @@
         display: none;
     }
     .fav-jokes--tabl-mob-shown {
-        display: block; 
         width: 480px;
+        display: block; 
         position: fixed;
         top: 0;
         right: 0;
@@ -45,8 +45,8 @@
 
 @media screen and (min-width: 1440px) {
     .fav-jokes--desk {
-        display: block;
         width: 480px;
+        display: block;
         position: fixed;
         top: 0;
         right: 0;

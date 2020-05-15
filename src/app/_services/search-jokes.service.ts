@@ -8,23 +8,12 @@ import { BehaviorSubject } from 'rxjs';
 
 export class SearchJokesService {
 
-  private jokesSource = new BehaviorSubject<Joke[]>([]); // emits
-
+  private jokesSource = new BehaviorSubject<Joke[]>([]); 
   currentJokes = this.jokesSource.asObservable();
   
-  constructor() { }
-  
-  UpdateJokes(...jokes) {
+  UpdateJokes(...jokes: Joke[]) {
     let updJokes = this.jokesSource.value;
     updJokes.unshift(...jokes)
     this.jokesSource.next(updJokes);
   }
-
-/*
-  UpdateJokes(unfavouritedJoke): void {
-    if (this.jokes.findIndex(joke => joke.id === unfavouritedJoke.id) === -1){
-      this.jokes.unshift(unfavouritedJoke);
-    }
-  }
-*/
 }

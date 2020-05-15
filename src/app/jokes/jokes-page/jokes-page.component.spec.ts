@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { JokesPageComponent } from './jokes-page.component';
-import { JokeService } from '../_services/joke.service';
-import { Joke } from '../_models/joke';
+import { JokeService } from '../../_services/joke.service';
+import { Joke } from '../../_models/joke';
 import { Observable } from 'rxjs';
 
 describe('AppComponent', () => {

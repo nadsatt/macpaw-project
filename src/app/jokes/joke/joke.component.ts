@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Joke } from '../_models/joke';
-import { FavJokesService } from '../_services/fav-jokes.service';
+import { Component, OnInit, Input } from '@angular/core';
+import { Joke } from '../../_models/joke';
+import { FavJokesService } from '../../_services/fav-jokes.service';
 
 @Component({
   selector: 'app-joke',

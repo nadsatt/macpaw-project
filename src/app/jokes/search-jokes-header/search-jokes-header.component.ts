@@ -1,5 +1,5 @@
 import { Component, Renderer2 } from '@angular/core';
-import { FavJokesService } from '../_services/fav-jokes.service';
+import { FavJokesService } from '../../_services/fav-jokes.service';
 
 @Component({
   selector: 'app-search-jokes-header',
