@@ -48,7 +48,7 @@ export class FavJokesService {
     favJokes.unshift(favJoke);
     this.SetFavJokes(favJokes);
 
-    this.favJokesSource.next(this.GetFavJokes());
+    this.PushUpdatedFavJokes(favJokes);
   }
 
   RemoveFavJoke(unfavJoke: Joke): void {
@@ -56,6 +56,10 @@ export class FavJokesService {
     favJokes = favJokes.filter(joke => joke.id !== unfavJoke.id);
     this.SetFavJokes(favJokes);
 
-    this.favJokesSource.next(this.GetFavJokes());
+    this.PushUpdatedFavJokes(favJokes);
+  }
+
+  private PushUpdatedFavJokes(updFavJokes: Joke[]): void {
+    this.favJokesSource.next(updFavJokes);
   }
 }

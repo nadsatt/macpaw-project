@@ -30,16 +30,24 @@ xdescribe('JokeComponent', () => {
   });
 
   it('should create', () => {
-    // assert
     expect(component).toBeTruthy();
   });
 
-  it('should define "lastUpdate" var after ngOnInit', () => {
-    // act
-    component.ngOnInit();
-
-    // assert
-    expect(component.lastUpdate).toBeInstanceOf(Number);
+  describe('ngOnInit', () => {
+    it('should execute "CalculateLastUpdate" method', () => {
+      // act
+      component.ngOnInit();
+  
+      // assert
+      expect(component.CalculateLastUpdate).toHaveBeenCalled();
+    })
+    it('should define "lastUpdate" var', () => {
+      // act
+      component.ngOnInit();
+  
+      // assert
+      expect(component.lastUpdate).toBeInstanceOf(Number);
+    })
   })
 
   describe('CalculateLastUpdate', () => {
@@ -58,57 +66,11 @@ xdescribe('JokeComponent', () => {
   })
 
   describe('Favourite', () => {
-    it ('should modify "isFavourite" jokes property to true', () => {
-      // arrange
-      component.joke.isFavourite = false;
-      fixture.detectChanges();
 
-      // act
-      component.Favourite();
-
-      // assert
-      expect(component.joke.isFavourite).toBe(true);
-    })
-
-    it ('should emit "jokeFavourited" event with joke', () => {
-      // arrange
-      let actual;
-      component.jokeFavourited.subscribe($event => {
-        actual = $event;
-      })
-      // act
-      component.Favourite();
-
-      // assert
-      expect(actual).toEqual(component.joke);
-    })
   })
 
   describe('Unfavourite', () => {
-    it ('should modify "isFavourite" jokes property to false', () => {
-      // arrange
-      component.joke.isFavourite = true;
-      fixture.detectChanges();
-      
-      // act
-      component.Unfavourite();
-
-      // assert
-      expect(component.joke.isFavourite).toBe(false);
-    })
-
-    it ('should emit "jokeUnfavourited" event with joke', () => {
-      // arrange
-      let actual;
-      component.jokeUnfavourited.subscribe($event => {
-        actual = $event;
-      })
-      // act
-      component.Unfavourite();
-
-      // assert
-      expect(actual).toEqual(component.joke);
-    })
+    
   })
 
   describe('template', () => {
@@ -152,58 +114,58 @@ xdescribe('JokeComponent', () => {
       expect(fixture.nativeElement.querySelector('.joke__category')).toBe(null);
     })
 
-   it('should not render category if joke is not fetched by category', () => {
-    // arrange && act
-    component.jokeFromFavJokes = false;
-    component.joke.fetchedByCategory = undefined;
-    fixture.detectChanges();
+    it('should not render category if joke is not fetched by category', () => {
+      // arrange && act
+      component.jokeFromFavJokes = false;
+      component.joke.fetchedByCategory = undefined;
+      fixture.detectChanges();
 
-    // assert
-    expect(fixture.nativeElement.querySelector('.joke__category')).toBe(null);
-   })
+      // assert
+      expect(fixture.nativeElement.querySelector('.joke__category')).toBe(null);
+    })
 
-   it('should render static fav-icon if joke from fav jokes', () => {
-    // arrange && act
-    component.jokeFromFavJokes = true;
-    component.joke.isFavourite = true;
-    fixture.detectChanges();
+    it('should render static fav-icon if joke from fav jokes', () => {
+      // arrange && act
+      component.jokeFromFavJokes = true;
+      component.joke.isFavourite = true;
+      fixture.detectChanges();
 
-    // assert
-    expect(fixture.nativeElement.querySelector('.fav-joke__fav-icon')).toBeInstanceOf(HTMLDivElement);
-    expect(fixture.nativeElement.querySelector('.search-joke__fav-icon')).toBe(null);
-   })
+      // assert
+      expect(fixture.nativeElement.querySelector('.fav-joke__fav-icon')).toBeInstanceOf(HTMLDivElement);
+      expect(fixture.nativeElement.querySelector('.search-joke__fav-icon')).toBe(null);
+    })
 
-   it('should render clickable fav-icon if joke from search jokes', () => {
-    // arrange && act
-    component.jokeFromFavJokes = false;
-    fixture.detectChanges();
+    it('should render clickable fav-icon if joke from search jokes', () => {
+      // arrange && act
+      component.jokeFromFavJokes = false;
+      fixture.detectChanges();
 
-    // assert
-    expect(fixture.nativeElement.querySelector('.search-joke__fav-icon')).toBeInstanceOf(HTMLDivElement);
-    expect(fixture.nativeElement.querySelector('.fav-joke__fav-icon')).toBe(null);
-   })
+      // assert
+      expect(fixture.nativeElement.querySelector('.search-joke__fav-icon')).toBeInstanceOf(HTMLDivElement);
+      expect(fixture.nativeElement.querySelector('.fav-joke__fav-icon')).toBe(null);
+    })
   
-   it('should render empty clickable fav-icon if joke from search jokes is unfavourited', () => {
-    // arrange && act
-    component.jokeFromFavJokes = false;
-    component.joke.isFavourite = false;
-    fixture.detectChanges();
- 
-     // assert
-     expect(fixture.nativeElement.querySelector('.joke__fav-icon--unfavourited')).toBeInstanceOf(SVGElement);
-     expect(fixture.nativeElement.querySelector('.joke__fav-icon--favourited')).toBe(null);
-   })
+    it('should render empty clickable fav-icon if joke from search jokes is unfavourited', () => {
+      // arrange && act
+      component.jokeFromFavJokes = false;
+      component.joke.isFavourite = false;
+      fixture.detectChanges();
+  
+      // assert
+      expect(fixture.nativeElement.querySelector('.joke__fav-icon--unfavourited')).toBeInstanceOf(SVGElement);
+      expect(fixture.nativeElement.querySelector('.joke__fav-icon--favourited')).toBe(null);
+    })
 
-   it('should render filled clickable fav-icon if joke from search jokes is favourited', () => {
-    // arrange && act
-    component.jokeFromFavJokes = false;
-    component.joke.isFavourite = true;
-    fixture.detectChanges();
- 
-     // assert
-     expect(fixture.nativeElement.querySelector('.joke__fav-icon--favourited')).toBeInstanceOf(SVGElement);
-     expect(fixture.nativeElement.querySelector('.joke__fav-icon--unfavourited')).toBe(null);
-   })
+    it('should render filled clickable fav-icon if joke from search jokes is favourited', () => {
+      // arrange && act
+      component.jokeFromFavJokes = false;
+      component.joke.isFavourite = true;
+      fixture.detectChanges();
+  
+      // assert
+      expect(fixture.nativeElement.querySelector('.joke__fav-icon--favourited')).toBeInstanceOf(SVGElement);
+      expect(fixture.nativeElement.querySelector('.joke__fav-icon--unfavourited')).toBe(null);
+    })
 
    it('should call "Favourite" method after click on empty clickable fav-icon', () => {
      // arrange
@@ -231,7 +193,7 @@ xdescribe('JokeComponent', () => {
     
     // assert
     expect(onClickMock).toHaveBeenCalled();
-  })
+   })
   })
 });
 

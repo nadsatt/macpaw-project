@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { Joke } from '../_models/joke';
 
@@ -15,12 +15,14 @@ export class JokeService {
   constructor(private http: HttpClient) { }
 
   GetJokeCategories(): Observable<string[]> {
-    return this.http.get<string[]>(this.api + 'categories');
+    return this.http.get<string[]>(this.api + 'categories').pipe(
+      catchError(this.HandleError)
+    );
   }
 
   GetRandomJoke(): Observable<Joke> {
     return this.http.get<Joke>(this.api + 'random').pipe(
-      catchError(err => this.HandleError(err))
+      catchError(this.HandleError)
     );
   }
 
@@ -30,30 +32,23 @@ export class JokeService {
         joke.fetchedByCategory = category;
         return joke;
       }),
-      catchError(err => this.HandleError(err))
+      catchError(this.HandleError)
     );
   }
 
   GetJokesBySearch(search: string): Observable<any> {
     return this.http.get<any>(this.api + 'search?query=' + search).pipe(
       map(jokes => jokes.result),
-      catchError(err => {
-        if (err.status === 400) {
-          return of([]);
-        }
-        else {
-          this.HandleError(err)
-        }
-      })
+      catchError(this.HandleError)
     );
   }
-
+  
   HandleError(err) {
     let errorMessage = '';
-    if (err.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${err.error.message}`;
-    } else {
+    if (err instanceof HttpErrorResponse) {
       errorMessage = `Error Code: ${err.status}\nMessage: ${err.message}`;
+    } else {
+      errorMessage = `Error: ${err.message}`;
     }
     return throwError(errorMessage);
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { JokeService } from '../../_services/joke.service';
 import { SearchJokesService } from '../../_services/search-jokes.service';
 
@@ -22,7 +22,7 @@ export class JokeFormComponent implements OnInit {
   }
   get submitDisabled(): boolean {
     return this.jokeForm.get('getJokeBy').value === 'getJokeBySearch' 
-      && !this.jokeForm.get('search').value;
+      && this.jokeForm.get('search').invalid;
   }
 
   constructor(private jokeService: JokeService,
@@ -35,7 +35,7 @@ export class JokeFormComponent implements OnInit {
     this.jokeForm = this.fb.group({
       getJokeBy: 'getJokeByRandom',
       category: '',
-      search: ''
+      search: ['', [Validators.required, Validators.minLength(3)]]
     });
   }
 
@@ -82,7 +82,7 @@ export class JokeFormComponent implements OnInit {
 
   GetJokesBySearch(search: string): void {
     this.jokeService.GetJokesBySearch(search).subscribe({
-      next: jokes => this.searchJokesService.UpdateJokes(...jokes),
+      next: jokes => jokes.lenght > 0 ? this.searchJokesService.UpdateJokes(...jokes) : console.log('sorry, no jokes!!!'),
       error: message => console.log(message)
     });
   }

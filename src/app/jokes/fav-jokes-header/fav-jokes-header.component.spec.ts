@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FavJokesHeaderComponent } from './fav-jokes-header.component';
 
-describe('FavJokesHeaderComponent', () => {
+xdescribe('FavJokesHeaderComponent', () => {
   let component: FavJokesHeaderComponent;
   let fixture: ComponentFixture<FavJokesHeaderComponent>;
 
