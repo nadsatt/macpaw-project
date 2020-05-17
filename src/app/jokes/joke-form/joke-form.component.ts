@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { JokeService } from '../../_services/joke.service';
 import { SearchJokesService } from '../../_services/search-jokes.service';
+import { Joke } from 'src/app/_models/joke';
 
 @Component({
   selector: 'app-joke-form',
@@ -13,6 +14,7 @@ export class JokeFormComponent implements OnInit {
 
   categories: string[];
   jokeForm: FormGroup;
+  message: string;
 
   get getJokeByVal(): string {
     return this.jokeForm.get('getJokeBy').value;
@@ -30,6 +32,7 @@ export class JokeFormComponent implements OnInit {
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    this.message = '';
     this.categories = [];
     this.GetJokeCategories();
     this.jokeForm = this.fb.group({
@@ -66,23 +69,27 @@ export class JokeFormComponent implements OnInit {
     }
   }
 
+  UpdateJokes(...jokes: Joke[]): void {
+    this.searchJokesService.UpdateJokes(...jokes);
+  }
+
   GetJokeByRandom(): void {
     this.jokeService.GetRandomJoke().subscribe({
-      next: joke => this.searchJokesService.UpdateJokes(joke),
+      next: joke => this.UpdateJokes(joke),
       error: message => console.log(message)
     });
   }
 
   GetJokeByCategory(category: string): void {
     this.jokeService.GetRandomJokeByCategory(category).subscribe({
-      next: joke => this.searchJokesService.UpdateJokes(joke),
+      next: joke => this.UpdateJokes(joke),
       error: message => console.log(message)
     });
   }
 
   GetJokesBySearch(search: string): void {
     this.jokeService.GetJokesBySearch(search).subscribe({
-      next: jokes => jokes.lenght > 0 ? this.searchJokesService.UpdateJokes(...jokes) : console.log('sorry, no jokes!!!'),
+      next: jokes => jokes.length > 0 ? this.UpdateJokes(...jokes) : this.message = "Sorry, no jokes for this text. Try another one!",
       error: message => console.log(message)
     });
   }

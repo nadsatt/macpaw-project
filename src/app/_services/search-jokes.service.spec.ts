@@ -9,7 +9,7 @@ xdescribe('SearchJokesService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     searchJokesService = TestBed.inject(SearchJokesService);
-    pushUpdJokesSpy = spyOn<any>(searchJokesService, 'PushUpdatedJokes'); 
+    pushUpdJokesSpy = spyOn<any>(searchJokesService, 'PushUpdatedJokes');
   });
 
   it('should be created', () => {
