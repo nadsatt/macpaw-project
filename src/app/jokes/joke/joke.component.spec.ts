@@ -1,14 +1,21 @@
-import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JokeComponent } from './joke.component';
 import { By } from '@angular/platform-browser';
+import { FavJokesService } from 'src/app/_services/fav-jokes.service';
 
-xdescribe('JokeComponent', () => {
+describe('JokeComponent', () => {
   let component: JokeComponent;
   let fixture: ComponentFixture<JokeComponent>;
+  let favJokesServiceSpy: {'AddFavJoke', 'RemoveFavJoke': jasmine.Spy};
 
   beforeEach(async(() => {
+    favJokesServiceSpy = jasmine.createSpyObj('FavJokesService', 
+      ['AddFavJoke', 'RemoveFavJoke']);
     TestBed.configureTestingModule({
-      declarations: [ JokeComponent ]
+      declarations: [ JokeComponent ],
+      providers: [
+        { provide: FavJokesService, useValue: favJokesServiceSpy }
+      ]
     })
     .compileComponents();
   }));
@@ -35,9 +42,12 @@ xdescribe('JokeComponent', () => {
 
   describe('ngOnInit', () => {
     it('should execute "CalculateLastUpdate" method', () => {
+      // arrange
+      spyOn(component, 'CalculateLastUpdate');
+
       // act
       component.ngOnInit();
-  
+      
       // assert
       expect(component.CalculateLastUpdate).toHaveBeenCalled();
     })
@@ -66,11 +76,54 @@ xdescribe('JokeComponent', () => {
   })
 
   describe('Favourite', () => {
+    it('should change joke "isFavourite" property to true', () => {
+      // arrange
+      component.joke.isFavourite = false;
 
+      // act
+      component.Favourite();
+
+      // assert
+      expect(component.joke.isFavourite).toEqual(true);
+    })
+
+    it('should call "AddFavJoke" method of FavJokesService with joke as arg', () => {
+      // arrange
+      favJokesServiceSpy.AddFavJoke.and.callFake((joke) => {});
+
+      // act
+      component.Favourite();
+
+      // assert
+      expect(favJokesServiceSpy.AddFavJoke).toHaveBeenCalled();
+      expect(favJokesServiceSpy.AddFavJoke).toHaveBeenCalledWith(component.joke);
+    })
   })
 
   describe('Unfavourite', () => {
-    
+    it('should change joke "isFavourite" property to false', () => {
+      // arrange
+      component.joke.isFavourite = true;
+
+      // act
+      component.Unfavourite();
+
+      // assert
+      expect(component.joke.isFavourite).toEqual(false);
+    })
+
+
+    it('should call "RemoveFavJoke" method of FavJokesService with joke as arg', () => {
+      // arrange
+      favJokesServiceSpy.RemoveFavJoke.and.callFake((joke) => {});
+
+      // act
+      component.Unfavourite();
+
+      // assert
+      expect(favJokesServiceSpy.RemoveFavJoke).toHaveBeenCalled();
+      expect(favJokesServiceSpy.RemoveFavJoke).toHaveBeenCalledWith(component.joke);
+    })
   })
 
   describe('template', () => {

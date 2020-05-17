@@ -15,8 +15,12 @@ export class FavJokesComponent implements OnInit {
   constructor(public favJokesService: FavJokesService) { }
 
   ngOnInit(): void {
-    this.favJokesService.currentFavJokes.subscribe({
-      next: favJokes => this.favJokes = favJokes
-    });
+    this.SubscribeToFavJokesSource();
+  }
+
+  SubscribeToFavJokesSource(): void {
+    this.favJokesService.currentFavJokes.subscribe(
+      favJokes => this.favJokes = favJokes
+    );
   }
 }

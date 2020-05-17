@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { FavJokesComponent } from './fav-jokes.component';
+import { FavJokesService } from 'src/app/_services/fav-jokes.service';
 
 xdescribe('FavJokesComponent', () => {
   let component: FavJokesComponent;
@@ -8,7 +8,9 @@ xdescribe('FavJokesComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FavJokesComponent ]
+      declarations: [ FavJokesComponent ],
+      providers: [ FavJokesService
+      ]
     })
     .compileComponents();
   }));
@@ -22,4 +24,17 @@ xdescribe('FavJokesComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('ngOnInit', () => {
+    it('should execute "SubscribeToFavJokesSource" method', () => {
+      // arrange
+      spyOn(component, 'SubscribeToFavJokesSource');
+
+      // act
+      component.ngOnInit();
+
+      // assert
+      expect(component.SubscribeToFavJokesSource).toHaveBeenCalled();
+    })
+  })
 });

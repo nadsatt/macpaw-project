@@ -2,15 +2,14 @@ import { TestBed } from '@angular/core/testing';
 import { SearchJokesService } from './search-jokes.service';
 import { Joke } from '../_models/joke';
 
-describe('SearchJokesService', () => {
+xdescribe('SearchJokesService', () => {
   let searchJokesService: SearchJokesService;
   let pushUpdJokesSpy: jasmine.Spy;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
     searchJokesService = TestBed.inject(SearchJokesService);
-    pushUpdJokesSpy = spyOn<any>(searchJokesService, 'PushUpdatedJokes');
-    
+    pushUpdJokesSpy = spyOn<any>(searchJokesService, 'PushUpdatedJokes'); 
   });
 
   it('should be created', () => {

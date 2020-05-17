@@ -81,35 +81,6 @@ xdescribe('JokeFormComponent', () => {
       }));
       fixture.detectChanges();
     })
-
-    it('should add joke to "jokes" array', () => {
-      // act
-      component.GetJokeByRandom();
-
-      // assert
-      expect(jokeServiceSpy.GetRandomJoke).toHaveBeenCalled();
-      //expect(component.jokes).toContain(joke);
-      //expect(component.jokes.length).toEqual(1);
-    })
-
-    it('should add joke at the beginning of "jokes" array', () => {
-      // arrange
-      /*component.jokes = [{ categories:[],
-          created_at:"2020-01-05 13:42:24.142371",
-          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
-          id:"6_MNkQ-JTKq3tS-Gx4H6Cg",
-          updated_at:"2020-01-05 13:42:24.142371",
-          url:"https://api.chucknorris.io/jokes/6_MNkQ-JTKq3tS-Gx4H6Cg",
-          value:"Chuck Norris went back in time and punched Moses in the face, just to prove that he could do it."
-      }];
-*/
-      // act
-      component.GetJokeByRandom();
-
-      // assert
-      //expect(component.jokes.length).toEqual(2);
-      //expect(component.jokes[0].id).toEqual(joke.id);
-    })
   })
 
   xdescribe('GetJokeByCategory', () => {
@@ -127,35 +98,6 @@ xdescribe('JokeFormComponent', () => {
         observer.next(joke);
       }));
       fixture.detectChanges();
-    })
-
-    it('should add joke to "jokes" array', () => {
-      component.GetJokeByCategory("any");
-
-      // assert
-      expect(jokeServiceSpy.GetRandomJokeByCategory).toHaveBeenCalled();
-      //expect(component.jokes).toContain(joke);
-      //expect(component.jokes.length).toEqual(1);
-    })
-
-    it('should add joke at the beginning of "jokes" array', () => {
-      // arrange
-      /*component.jokes = [
-        { categories:[],
-          created_at:"2020-01-05 13:42:24.142371",
-          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
-          id:"6_MNkQ-JTKq3tS-Gx4H6Cg",
-          updated_at:"2020-01-05 13:42:24.142371",
-          url:"https://api.chucknorris.io/jokes/6_MNkQ-JTKq3tS-Gx4H6Cg",
-          value:"Chuck Norris went back in time and punched Moses in the face, just to prove that he could do it." }
-      ];
-  */
-      // act
-      component.GetJokeByCategory("any");
-  
-      // assert
-      //expect(component.jokes.length).toEqual(2);
-      //expect(component.jokes[0].id).toEqual(joke.id);
     })
   })
 
@@ -181,38 +123,6 @@ xdescribe('JokeFormComponent', () => {
         observer.next(jokes);
       }));
       fixture.detectChanges();
-    })
-
-    it('should add jokes to "jokes" array', () => {
-      // act
-      component.GetJokesBySearch('any');
-
-      // assert
-      expect(jokeServiceSpy.GetJokesBySearch).toHaveBeenCalled();
-      //expect(component.jokes.length).toEqual(2);
-      //expect(component.jokes).toContain(jokes[0]);
-      //expect(component.jokes).toContain(jokes[1]);
-    })
-
-    it('should add jokes to the beginning of "jokes" array', () => {
-      // assert
-      let jokeId = "6_MNkQ-JTKq3tS-Gx4H6Cg";
-      /*component.jokes = [
-        { categories:[],
-          created_at:"2020-01-05 13:42:24.142371",
-          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
-          id:jokeId,
-          updated_at:"2020-01-05 13:42:24.142371",
-          url:"https://api.chucknorris.io/jokes/6_MNkQ-JTKq3tS-Gx4H6Cg",
-          value:"Chuck Norris went back in time and punched Moses in the face, just to prove that he could do it." }
-      ];
-    */
-      // act
-      component.GetJokesBySearch('any');
-
-      // assert
-      //expect(component.jokes.length).toEqual(3);
-      //expect(component.jokes[2].id).toEqual(jokeId);
     })
   })
 })
