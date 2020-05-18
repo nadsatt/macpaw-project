@@ -38,6 +38,11 @@
                 matInput 
                 placeholder="Free text search..."
                 autocomplete="off">
+      <div class="alert alert-danger" 
+           role="alert" 
+           *ngIf="displayMinLengthAlert">
+           Use at least 3 symbols for search text.
+      </div>
     </div>
   </mat-radio-group>
   <button class="joke-form__button"
@@ -45,4 +50,9 @@
           (click)="GetJoke()">
           Get a joke
   </button>
+  <div class="alert alert-light" 
+       role="alert"
+       *ngIf="displayNoJokesAlert">
+       Sorry, no jokes for this text. Try another one!
+  </div>
 </form>

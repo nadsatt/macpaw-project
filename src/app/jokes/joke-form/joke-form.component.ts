@@ -14,7 +14,8 @@ export class JokeFormComponent implements OnInit {
 
   categories: string[];
   jokeForm: FormGroup;
-  message: string;
+  displayMinLengthAlert: boolean;
+  displayNoJokesAlert: boolean;
 
   get getJokeByVal(): string {
     return this.jokeForm.get('getJokeBy').value;
@@ -32,13 +33,27 @@ export class JokeFormComponent implements OnInit {
     private fb: FormBuilder) { }
 
   ngOnInit(): void {
-    this.message = '';
     this.categories = [];
     this.GetJokeCategories();
+    this.displayMinLengthAlert = false;
+    this.displayNoJokesAlert = false;
+
     this.jokeForm = this.fb.group({
       getJokeBy: 'getJokeByRandom',
       category: '',
       search: ['', [Validators.required, Validators.minLength(3)]]
+    });
+
+    this.jokeForm.get('search').valueChanges.subscribe(value => {
+      value.length > 0 && value.length < 3 ?
+        this.displayMinLengthAlert = true : 
+        this.displayMinLengthAlert = false;
+      this.displayNoJokesAlert = false;
+    })
+
+    this.jokeForm.get('getJokeBy').valueChanges.subscribe(value => {
+      this.jokeForm.patchValue({'search': ''});
+      this.displayNoJokesAlert = false;
     });
   }
 
@@ -89,7 +104,9 @@ export class JokeFormComponent implements OnInit {
 
   GetJokesBySearch(search: string): void {
     this.jokeService.GetJokesBySearch(search).subscribe({
-      next: jokes => jokes.length > 0 ? this.UpdateJokes(...jokes) : this.message = "Sorry, no jokes for this text. Try another one!",
+      next: jokes => jokes.length > 0 ? 
+        this.UpdateJokes(...jokes) : 
+        this.displayNoJokesAlert = true,
       error: message => console.log(message)
     });
   }

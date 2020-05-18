@@ -60,6 +60,16 @@
                 padding: 10px 15px;
                 resize: none;
             }
+            .alert-danger {
+                width: 100%;
+                max-width: 320px;
+                min-height: 30px;
+                line-height: 20px;
+                margin: 5px 0 0;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                border-radius: 10px;
+            }
         }
     }
     .joke-form__button {
@@ -77,5 +87,9 @@
     }
     .joke-form__button:disabled {
         background: linear-gradient(92.01deg, rgb(168, 187, 255) 0%, rgb(155, 176, 253) 100%);
+    }
+    .alert-light {
+        margin: 20px 0 0 5px;
+        padding: 0;
     }
 }
