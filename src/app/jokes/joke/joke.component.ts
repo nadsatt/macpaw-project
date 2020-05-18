@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Joke } from '../../_models/joke';
 import { FavJokesService } from '../../_services/fav-jokes.service';
+import { SearchJokesService } from 'src/app/_services/search-jokes.service';
 
 @Component({
   selector: 'app-joke',
@@ -14,7 +15,8 @@ export class JokeComponent implements OnInit {
   @Input() jokeFromFavJokes: boolean;
   lastUpdate: number;
 
-  constructor(private favJokesService: FavJokesService) { }
+  constructor(private favJokesService: FavJokesService,
+    private searchJokesService: SearchJokesService) { }
 
   ngOnInit(): void {
     if (this.joke) {
@@ -35,5 +37,6 @@ export class JokeComponent implements OnInit {
   Unfavourite(): void {
     this.joke.isFavourite = false;
     this.favJokesService.RemoveFavJoke(this.joke);
+    this.searchJokesService.UpdateJokes(this.joke);
   }
 }

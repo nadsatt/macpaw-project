@@ -2,19 +2,25 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JokeComponent } from './joke.component';
 import { By } from '@angular/platform-browser';
 import { FavJokesService } from 'src/app/_services/fav-jokes.service';
+import { SearchJokesService } from 'src/app/_services/search-jokes.service';
 
 describe('JokeComponent', () => {
   let component: JokeComponent;
   let fixture: ComponentFixture<JokeComponent>;
   let favJokesServiceSpy: {'AddFavJoke', 'RemoveFavJoke': jasmine.Spy};
+  let searchJokesServiceSpy: {'UpdateJokes': jasmine.Spy};
+
 
   beforeEach(async(() => {
     favJokesServiceSpy = jasmine.createSpyObj('FavJokesService', 
       ['AddFavJoke', 'RemoveFavJoke']);
+    searchJokesServiceSpy = jasmine.createSpyObj('SearchJokesService', 
+      ['UpdateJokes']);
     TestBed.configureTestingModule({
       declarations: [ JokeComponent ],
       providers: [
-        { provide: FavJokesService, useValue: favJokesServiceSpy }
+        { provide: FavJokesService, useValue: favJokesServiceSpy },
+        { provide: SearchJokesService, useValue: searchJokesServiceSpy }
       ]
     })
     .compileComponents();
@@ -112,7 +118,6 @@ describe('JokeComponent', () => {
       expect(component.joke.isFavourite).toEqual(false);
     })
 
-
     it('should call "RemoveFavJoke" method of FavJokesService with joke as arg', () => {
       // arrange
       favJokesServiceSpy.RemoveFavJoke.and.callFake((joke) => {});
@@ -123,6 +128,18 @@ describe('JokeComponent', () => {
       // assert
       expect(favJokesServiceSpy.RemoveFavJoke).toHaveBeenCalled();
       expect(favJokesServiceSpy.RemoveFavJoke).toHaveBeenCalledWith(component.joke);
+    })
+
+    it('should call "UpdateJokes" method of SearchJokesService with joke as arg', () => {
+      // arrange
+      searchJokesServiceSpy.UpdateJokes.and.callFake((joke) => {});
+
+      // act
+      component.Unfavourite();
+
+      // assert
+      expect(searchJokesServiceSpy.UpdateJokes).toHaveBeenCalled();
+      expect(searchJokesServiceSpy.UpdateJokes).toHaveBeenCalledWith(component.joke);
     })
   })
 

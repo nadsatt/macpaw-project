@@ -15,10 +15,18 @@ export class SearchJokesService {
     this.jokesSource.next(updJokes);
   }
 
-  UpdateJokes(...newJokes: Joke[]) {
+  UpdateJokes(...newJokes: Joke[]): void {
     let jokes = this.jokesSource.value;
-    jokes.unshift(...newJokes)
-    
+
+    if(newJokes.length === 1 && 
+       jokes.findIndex(joke => joke.id === newJokes[0].id) === -1) {
+      let newJoke = newJokes[0];
+      jokes.unshift(newJoke);
+    }
+    if(newJokes.length > 1) {
+      jokes.unshift(...newJokes);
+    }
+
     this.PushUpdatedJokes(jokes);
   }
 }

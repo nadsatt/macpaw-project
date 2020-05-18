@@ -342,7 +342,7 @@ describe('JokeFormComponent', () => {
       expect(component.UpdateJokes).toHaveBeenCalledWith(...jokes);
     })
 
-    it('should assign defined value to "message" var if no jokes returned after subscription', () => {
+    it('should modify "displayNoJokesAlert" to true if no jokes returned after subscription', () => {
       // arrange
       let search = 'any';
       spyOn(JokeServiceClass.prototype, 'GetJokesBySearch').and.returnValue(of([]));
@@ -353,7 +353,7 @@ describe('JokeFormComponent', () => {
 
       // assert
       expect(component.UpdateJokes).not.toHaveBeenCalled();
-      expect(component.message).toEqual('Sorry, no jokes for this text. Try another one!');
+      expect(component.displayNoJokesAlert).toEqual(true);
     })
   })
 
