@@ -15,6 +15,10 @@ export class SearchJokesComponent implements OnInit {
   constructor(private searchJokesService: SearchJokesService) { }
 
   ngOnInit(): void {
+   this.SubscribeToJokesSource();
+  }
+
+  SubscribeToJokesSource(): void {
     this.searchJokesService.currentJokes.subscribe({
       next: jokes => this.jokes = jokes
     });

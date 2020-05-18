@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { SearchJokesService } from './search-jokes.service';
 import { Joke } from '../_models/joke';
 
-xdescribe('SearchJokesService', () => {
+describe('SearchJokesService', () => {
   let searchJokesService: SearchJokesService;
   let pushUpdJokesSpy: jasmine.Spy;
 
