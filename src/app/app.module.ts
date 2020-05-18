@@ -10,7 +10,7 @@ import { JokesModule } from './jokes/jokes.module';
   ],
   imports: [
     BrowserModule,
-    JokesModule
+    JokesModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
