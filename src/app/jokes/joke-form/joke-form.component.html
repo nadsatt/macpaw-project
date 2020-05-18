@@ -18,12 +18,12 @@
       </mat-radio-button>
       <div class="joke-form__category-group"
            *ngIf="getJokeByVal === 'getJokeByCategory'"> 
-        <button class="joke-form__category-button"
-                [ngClass]="{'joke-form__category-button--selected': categoryVal === category}"
-                *ngFor="let category of categories"
-                (click)="SelectCategory(category)">
-                {{category}}
-        </button>    
+        <div class="joke-form__category-chip"
+             [ngClass]="{'joke-form__category-chip--selected': categoryVal === category}"
+             *ngFor="let category of categories"
+             (click)="SelectCategory(category)">
+             {{category}}
+        </div>    
       </div>
     </div>
     <div class="joke-form__search">

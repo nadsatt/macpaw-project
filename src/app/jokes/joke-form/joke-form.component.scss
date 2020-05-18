@@ -27,20 +27,23 @@
             }
             .joke-form__category-group {
                 margin-top: 20px;
-                .joke-form__category-button {
+                .joke-form__category-chip {
+                    display: inline-block;
+                    width: fit-content;
                     height: 28px;
+                    line-height: 12px;
                     margin: 0 10px 10px 0;
                     padding: 6px 15px;
                     border: 2px solid #F8F8F8;
                     border-radius: 6px;
                     background-color: white;
-                    font-weight: 500;
                     font-size: 12px;
+                    font-weight: 500;
                     letter-spacing: 2px;
                     text-transform: uppercase;
                     color: #ABABAB;
                 }
-                .joke-form__category-button--selected {
+                .joke-form__category-chip--selected {
                     background: #F8F8F8;
                     border: 2px solid #F8F8F8;
                     color: #333333;
