@@ -1,15 +1,21 @@
-import { async, ComponentFixture, TestBed, tick, fakeAsync } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { JokeComponent } from './joke.component';
 import { By } from '@angular/platform-browser';
+import { FavJokesService } from 'src/app/_services/fav-jokes.service';
 
-/*
 describe('JokeComponent', () => {
   let component: JokeComponent;
   let fixture: ComponentFixture<JokeComponent>;
+  let favJokesServiceSpy: {'AddFavJoke', 'RemoveFavJoke': jasmine.Spy};
 
   beforeEach(async(() => {
+    favJokesServiceSpy = jasmine.createSpyObj('FavJokesService', 
+      ['AddFavJoke', 'RemoveFavJoke']);
     TestBed.configureTestingModule({
-      declarations: [ JokeComponent ]
+      declarations: [ JokeComponent ],
+      providers: [
+        { provide: FavJokesService, useValue: favJokesServiceSpy }
+      ]
     })
     .compileComponents();
   }));
@@ -31,16 +37,27 @@ describe('JokeComponent', () => {
   });
 
   it('should create', () => {
-    // assert
     expect(component).toBeTruthy();
   });
 
-  it('should define "lastUpdate" var after ngOnInit', () => {
-    // act
-    component.ngOnInit();
+  describe('ngOnInit', () => {
+    it('should execute "CalculateLastUpdate" method', () => {
+      // arrange
+      spyOn(component, 'CalculateLastUpdate');
 
-    // assert
-    expect(component.lastUpdate).toBeInstanceOf(Number);
+      // act
+      component.ngOnInit();
+      
+      // assert
+      expect(component.CalculateLastUpdate).toHaveBeenCalled();
+    })
+    it('should define "lastUpdate" var', () => {
+      // act
+      component.ngOnInit();
+  
+      // assert
+      expect(component.lastUpdate).toBeInstanceOf(Number);
+    })
   })
 
   describe('CalculateLastUpdate', () => {
@@ -59,56 +76,53 @@ describe('JokeComponent', () => {
   })
 
   describe('Favourite', () => {
-    it ('should modify "isFavourite" jokes property to true', () => {
+    it('should change joke "isFavourite" property to true', () => {
       // arrange
       component.joke.isFavourite = false;
-      fixture.detectChanges();
 
       // act
       component.Favourite();
 
       // assert
-      expect(component.joke.isFavourite).toBe(true);
+      expect(component.joke.isFavourite).toEqual(true);
     })
 
-    it ('should emit "jokeFavourited" event with joke', () => {
+    it('should call "AddFavJoke" method of FavJokesService with joke as arg', () => {
       // arrange
-      let actual;
-      component.jokeFavourited.subscribe($event => {
-        actual = $event;
-      })
+      favJokesServiceSpy.AddFavJoke.and.callFake((joke) => {});
+
       // act
       component.Favourite();
 
       // assert
-      expect(actual).toEqual(component.joke);
+      expect(favJokesServiceSpy.AddFavJoke).toHaveBeenCalled();
+      expect(favJokesServiceSpy.AddFavJoke).toHaveBeenCalledWith(component.joke);
     })
   })
 
   describe('Unfavourite', () => {
-    it ('should modify "isFavourite" jokes property to false', () => {
+    it('should change joke "isFavourite" property to false', () => {
       // arrange
       component.joke.isFavourite = true;
-      fixture.detectChanges();
-      
+
       // act
       component.Unfavourite();
 
       // assert
-      expect(component.joke.isFavourite).toBe(false);
+      expect(component.joke.isFavourite).toEqual(false);
     })
 
-    it ('should emit "jokeUnfavourited" event with joke', () => {
+
+    it('should call "RemoveFavJoke" method of FavJokesService with joke as arg', () => {
       // arrange
-      let actual;
-      component.jokeUnfavourited.subscribe($event => {
-        actual = $event;
-      })
+      favJokesServiceSpy.RemoveFavJoke.and.callFake((joke) => {});
+
       // act
       component.Unfavourite();
 
       // assert
-      expect(actual).toEqual(component.joke);
+      expect(favJokesServiceSpy.RemoveFavJoke).toHaveBeenCalled();
+      expect(favJokesServiceSpy.RemoveFavJoke).toHaveBeenCalledWith(component.joke);
     })
   })
 
@@ -153,58 +167,58 @@ describe('JokeComponent', () => {
       expect(fixture.nativeElement.querySelector('.joke__category')).toBe(null);
     })
 
-   it('should not render category if joke is not fetched by category', () => {
-    // arrange && act
-    component.jokeFromFavJokes = false;
-    component.joke.fetchedByCategory = undefined;
-    fixture.detectChanges();
+    it('should not render category if joke is not fetched by category', () => {
+      // arrange && act
+      component.jokeFromFavJokes = false;
+      component.joke.fetchedByCategory = undefined;
+      fixture.detectChanges();
 
-    // assert
-    expect(fixture.nativeElement.querySelector('.joke__category')).toBe(null);
-   })
+      // assert
+      expect(fixture.nativeElement.querySelector('.joke__category')).toBe(null);
+    })
 
-   it('should render static fav-icon if joke from fav jokes', () => {
-    // arrange && act
-    component.jokeFromFavJokes = true;
-    component.joke.isFavourite = true;
-    fixture.detectChanges();
+    it('should render static fav-icon if joke from fav jokes', () => {
+      // arrange && act
+      component.jokeFromFavJokes = true;
+      component.joke.isFavourite = true;
+      fixture.detectChanges();
 
-    // assert
-    expect(fixture.nativeElement.querySelector('.fav-joke__fav-icon')).toBeInstanceOf(HTMLDivElement);
-    expect(fixture.nativeElement.querySelector('.search-joke__fav-icon')).toBe(null);
-   })
+      // assert
+      expect(fixture.nativeElement.querySelector('.fav-joke__fav-icon')).toBeInstanceOf(HTMLDivElement);
+      expect(fixture.nativeElement.querySelector('.search-joke__fav-icon')).toBe(null);
+    })
 
-   it('should render clickable fav-icon if joke from search jokes', () => {
-    // arrange && act
-    component.jokeFromFavJokes = false;
-    fixture.detectChanges();
+    it('should render clickable fav-icon if joke from search jokes', () => {
+      // arrange && act
+      component.jokeFromFavJokes = false;
+      fixture.detectChanges();
 
-    // assert
-    expect(fixture.nativeElement.querySelector('.search-joke__fav-icon')).toBeInstanceOf(HTMLDivElement);
-    expect(fixture.nativeElement.querySelector('.fav-joke__fav-icon')).toBe(null);
-   })
+      // assert
+      expect(fixture.nativeElement.querySelector('.search-joke__fav-icon')).toBeInstanceOf(HTMLDivElement);
+      expect(fixture.nativeElement.querySelector('.fav-joke__fav-icon')).toBe(null);
+    })
   
-   it('should render empty clickable fav-icon if joke from search jokes is unfavourited', () => {
-    // arrange && act
-    component.jokeFromFavJokes = false;
-    component.joke.isFavourite = false;
-    fixture.detectChanges();
- 
-     // assert
-     expect(fixture.nativeElement.querySelector('.joke__fav-icon--unfavourited')).toBeInstanceOf(SVGElement);
-     expect(fixture.nativeElement.querySelector('.joke__fav-icon--favourited')).toBe(null);
-   })
+    it('should render empty clickable fav-icon if joke from search jokes is unfavourited', () => {
+      // arrange && act
+      component.jokeFromFavJokes = false;
+      component.joke.isFavourite = false;
+      fixture.detectChanges();
+  
+      // assert
+      expect(fixture.nativeElement.querySelector('.joke__fav-icon--unfavourited')).toBeInstanceOf(SVGElement);
+      expect(fixture.nativeElement.querySelector('.joke__fav-icon--favourited')).toBe(null);
+    })
 
-   it('should render filled clickable fav-icon if joke from search jokes is favourited', () => {
-    // arrange && act
-    component.jokeFromFavJokes = false;
-    component.joke.isFavourite = true;
-    fixture.detectChanges();
- 
-     // assert
-     expect(fixture.nativeElement.querySelector('.joke__fav-icon--favourited')).toBeInstanceOf(SVGElement);
-     expect(fixture.nativeElement.querySelector('.joke__fav-icon--unfavourited')).toBe(null);
-   })
+    it('should render filled clickable fav-icon if joke from search jokes is favourited', () => {
+      // arrange && act
+      component.jokeFromFavJokes = false;
+      component.joke.isFavourite = true;
+      fixture.detectChanges();
+  
+      // assert
+      expect(fixture.nativeElement.querySelector('.joke__fav-icon--favourited')).toBeInstanceOf(SVGElement);
+      expect(fixture.nativeElement.querySelector('.joke__fav-icon--unfavourited')).toBe(null);
+    })
 
    it('should call "Favourite" method after click on empty clickable fav-icon', () => {
      // arrange
@@ -232,7 +246,7 @@ describe('JokeComponent', () => {
     
     // assert
     expect(onClickMock).toHaveBeenCalled();
-  })
+   })
   })
 });
-*/
+

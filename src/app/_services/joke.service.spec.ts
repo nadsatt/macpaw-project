@@ -1,9 +1,10 @@
 import { JokeService } from './joke.service';
-import { of, throwError } from 'rxjs';
+import { of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+import { cold } from 'jasmine-marbles';
 
-/*
 describe('JokeService', () => {
-  // global arrange 
+
   let jokeService: JokeService;
   let httpClientSpy: { 'get': jasmine.Spy };
 
@@ -13,7 +14,7 @@ describe('JokeService', () => {
   })
 
   describe('GetJokeCategories', () => {
-    it ('should be called once with defined api', () => {
+    it('should be called once with defined api', () => {
       // arrange
       httpClientSpy.get.and.returnValue(of(true));
       let api: string = 'https://api.chucknorris.io/jokes/categories';
@@ -26,7 +27,7 @@ describe('JokeService', () => {
       expect(httpClientSpy.get).toHaveBeenCalledWith(api);
     })
 
-    it ('should return expected categories', () => {
+    it('should return observable which returns string array', () => {
       // arrange 
       let expected = [
         "animal","career","celebrity","dev","explicit",
@@ -37,7 +38,10 @@ describe('JokeService', () => {
 
       // act && assert
       jokeService.GetJokeCategories().subscribe({
-        next: actual => expect(actual).toEqual(expected)
+        next: actual => {
+          expect(actual).toBeInstanceOf(Array);
+          expect(typeof actual[0]).toBeInstanceOf(String);
+        }
       });
     })
   })
@@ -56,7 +60,7 @@ describe('JokeService', () => {
       expect(httpClientSpy.get).toHaveBeenCalledWith(api);
     })
 
-    it ('should return joke', () => {
+    it ('should return observable which returns joke', () => {
       // arrange 
       let expected = {
         categories:[],
@@ -77,7 +81,7 @@ describe('JokeService', () => {
   })
 
   describe('GetRandomJokeByCategory', () => {
-    it ('should be called once with defined api + category', () => {
+    it ('should be called once with defined api', () => {
       // arrange
       httpClientSpy.get.and.returnValue(of(true));
       let api = 'https://api.chucknorris.io/jokes/random?category=';
@@ -91,7 +95,7 @@ describe('JokeService', () => {
       expect(httpClientSpy.get).toHaveBeenCalledWith(api + category);
     })
 
-    it ('should return modified joke', () => {
+    it ('should return observable which returns modified joke', () => {
       // arrange
       let category = "any";
       let joke = {
@@ -102,7 +106,6 @@ describe('JokeService', () => {
         url:"https://api.chucknorris.io/jokes/XqF6RY0lQDK96FUZj5XdXA",
         value:"Chuck Norris can eat the flesh of banana without peeling it."
       };
-      httpClientSpy.get.and.returnValue(of(joke));
       let expected = {
         categories:[],
         created_at:"2020-01-05 13:42:25.628594",
@@ -112,6 +115,7 @@ describe('JokeService', () => {
         value:"Chuck Norris can eat the flesh of banana without peeling it.",
         fetchedByCategory: category
       };
+      httpClientSpy.get.and.returnValue(of(joke));
 
       // act && assert
       jokeService.GetRandomJokeByCategory(category).subscribe({ 
@@ -121,7 +125,7 @@ describe('JokeService', () => {
   })
 
   describe('GetJokesBySearch', () => {
-    it ('should be called once with defined api + text', () => {
+    it ('should be called once with defined api', () => {
       // arrange
       httpClientSpy.get.and.returnValue(of(true));
       let api = 'https://api.chucknorris.io/jokes/search?query=';
@@ -135,17 +139,17 @@ describe('JokeService', () => {
       expect(httpClientSpy.get).toHaveBeenCalledWith(api + text);
     })
 
-    it('should return jokes', () => {
+    it('should return observable which returns jokes', () => {
       // arrange
       let expected = [
-        {categories:[],created_at:"2020-01-05 13:42:26.991637",
-         icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
-         id:"0cyirBrJSay5yYEL1yYw_A", 
-         updated_at:"2020-01-05 13:42:26.991637",
-         url:"https://api.chucknorris.io/jokes/0cyirBrJSay5yYEL1yYw_A",
-         value:"In the original making of Scarface when Tony said \"say hello to my little friend\" Chuck Norris appeared. However, the director cut it out said it was too gruesome for a R rated movie."
+        { categories:[],created_at:"2020-01-05 13:42:26.991637",
+          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
+          id:"0cyirBrJSay5yYEL1yYw_A", 
+          updated_at:"2020-01-05 13:42:26.991637",
+          url:"https://api.chucknorris.io/jokes/0cyirBrJSay5yYEL1yYw_A",
+          value:"In the original making of Scarface when Tony said \"say hello to my little friend\" Chuck Norris appeared. However, the director cut it out said it was too gruesome for a R rated movie."
         },
-         {categories:[],created_at:"2020-01-05 13:42:30.480041",
+        { categories:[],created_at:"2020-01-05 13:42:30.480041",
           icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
           id:"g96iRXO6TPWAgWkrWf_YRQ",
           updated_at:"2020-01-05 13:42:30.480041",
@@ -160,27 +164,33 @@ describe('JokeService', () => {
         next: actual => expect(actual).toEqual(expected)
       })
     })
+  })
 
-    it ('should return empty array if 4** error occurs', () => {
-      // arrange
-      httpClientSpy.get.and.returnValue(throwError({status: 400}));
-
-      // act && assert
-      jokeService.GetJokesBySearch("text").subscribe({
-        next: actual => expect(actual).toEqual(new Array())
-      });
+  describe('HandleError', () => {
+    it('should throw error with defined message if error is client-side', () => {
+        // arrange
+        let err = new Error('client-side error occured');
+        let expected$ = cold('#', undefined, 'Error: client-side error occured');
+  
+        // act
+        let actual$ = jokeService.HandleError(err);
+  
+        // assert
+        expect(actual$).toBeObservable(expected$);
     })
 
-    it ('should return error it if non 4** error occurs', () => {
-      // arrange
-      let expected = {status: 500};
-      httpClientSpy.get.and.returnValue(throwError(expected));
-  
-      // act && assert
-      jokeService.GetJokesBySearch("text").subscribe({
-        error: actual => expect(actual).toEqual(expected)
-      })
+    it('should throw error with defined message if error is server-side', () => {
+          // arrange
+          let err = new HttpErrorResponse({status: 401, url: 'https://any'});
+          let expected$ = cold('#', undefined, 
+          'Error Code: 401\nMessage: Http failure response for https://any: 401 undefined');
+    
+          // act
+          let actual$ = jokeService.HandleError(err);
+    
+          // assert
+          expect(actual$).toBeObservable(expected$);
     })
   })
 });
-*/
+

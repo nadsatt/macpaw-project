@@ -1,0 +1,39 @@
+.search-jokes-header {
+    .search-jokes-header__text {
+        width: 87px;
+        height: 28px;
+        line-height: 28px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+}
+
+@media screen and (max-width: 1439px) {
+    .search-jokes-header {
+        display: flex;
+        justify-content: space-between;
+        font-style: normal;
+        .search-jokes-header__icon {
+            display: flex;
+            align-items: center;
+            svg {
+                margin-right: 10px;
+            }
+            span {
+                width: 84px;
+                line-height: 28px;
+                font-size: 20px;
+                font-weight: 500;
+                color: #ABABAB;
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .search-jokes-header {
+        .search-jokes-header__icon {
+            display: none;
+        }
+    }
+}

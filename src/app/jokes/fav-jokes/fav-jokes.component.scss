@@ -1,0 +1,61 @@
+@media screen and (max-width:767px) {
+    .fav-jokes--tabl-mob-hidden {
+        display: none;
+    }
+    .fav-jokes--tabl-mob-shown {
+        display: block; 
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 20px 20px 0;
+        background-color: #F8F8F8;
+        overflow: scroll;
+        .fav-jokes__background {
+            display: none;
+        }
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1439px) {
+    .fav-jokes--tabl-mob-hidden {
+        display: none;
+    }
+    .fav-jokes--tabl-mob-shown {
+        width: 480px;
+        display: block; 
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        padding: 40px 40px 0;
+        background-color: #F8F8F8;
+        overflow: scroll;
+        .fav-jokes__background {
+            width: calc(100% - 480px);
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+    }   
+}
+
+@media screen and (min-width: 1440px) {
+    .fav-jokes--desk {
+        width: 480px;
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        padding: 40px 40px 0;
+        background-color: #F8F8F8;
+        overflow: scroll;
+        .fav-jokes__background {
+            display: none;
+        }
+    } 
+}

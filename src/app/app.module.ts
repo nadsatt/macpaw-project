@@ -1,27 +1,19 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { MaterialModule } from './material/material.module';
-import { JokeComponent } from './joke/joke.component';
-import { JokeFormComponent } from './joke-form/joke-form.component';
+import { JokesModule } from './jokes/jokes.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    JokeComponent,
-    JokeFormComponent,
+    AppComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    MaterialModule
+    JokesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

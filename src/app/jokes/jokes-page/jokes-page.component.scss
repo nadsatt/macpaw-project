@@ -1,0 +1,39 @@
+.search-jokes-section {
+    p {
+        height: 44px;
+        line-height: 44px;
+    }
+    p:first-of-type {
+        margin-top: 78px;
+        font-size: 32px;
+        font-weight: bold;
+    }
+    p:last-of-type {
+        font-size: 24px;
+        font-weight: 500;  
+    }
+}
+
+@media screen and (max-width:767px) {
+    .search-jokes-section {
+        padding: 20px 20px 0;
+        p:last-of-type {
+            width: 100%;
+            height: auto;
+        }
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1439px) {
+    .search-jokes-section {
+        padding: 40px 40px 0;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .search-jokes-section {
+        width: calc(100% - 480px);
+        padding: 40px 140px 0;
+    }
+}
+
