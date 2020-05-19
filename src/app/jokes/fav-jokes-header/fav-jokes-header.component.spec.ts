@@ -3,7 +3,7 @@ import { FavJokesHeaderComponent } from './fav-jokes-header.component';
 import { FavJokesService } from 'src/app/_services/fav-jokes.service';
 import { By } from '@angular/platform-browser';
 
-xdescribe('FavJokesHeaderComponent', () => {
+describe('FavJokesHeaderComponent', () => {
   let component: FavJokesHeaderComponent;
   let fixture: ComponentFixture<FavJokesHeaderComponent>;
   let favJokesServiceSpy: {'HideFavJokes': jasmine.Spy};

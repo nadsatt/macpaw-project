@@ -4,18 +4,27 @@ import { By } from '@angular/platform-browser';
 import { FavJokesService } from 'src/app/_services/fav-jokes.service';
 import { SearchJokesService } from 'src/app/_services/search-jokes.service';
 
-xdescribe('JokeComponent', () => {
+describe('JokeComponent', () => {
   let component: JokeComponent;
   let fixture: ComponentFixture<JokeComponent>;
-  let favJokesServiceSpy: {'AddFavJoke', 'RemoveFavJoke': jasmine.Spy};
-  let searchJokesServiceSpy: {'UpdateJokes': jasmine.Spy};
-
+  let favJokesServiceSpy: {
+    'UpdateFavJokesAfterFavouritingJoke', 
+    'UpdateFavJokesAfterUnfavouritingJoke': jasmine.Spy
+  };
+  let searchJokesServiceSpy: {
+    'UpdateSearchJokesAfterFavouritingJoke'
+    'UpdateSearchJokesAfterUnfavouritingJoke': jasmine.Spy
+  };
 
   beforeEach(async(() => {
-    favJokesServiceSpy = jasmine.createSpyObj('FavJokesService', 
-      ['AddFavJoke', 'RemoveFavJoke']);
-    searchJokesServiceSpy = jasmine.createSpyObj('SearchJokesService', 
-      ['UpdateJokes']);
+    favJokesServiceSpy = jasmine.createSpyObj('FavJokesService', [
+      'UpdateFavJokesAfterFavouritingJoke', 
+      'UpdateFavJokesAfterUnfavouritingJoke'
+    ]);
+    searchJokesServiceSpy = jasmine.createSpyObj('SearchJokesService', [
+      'UpdateSearchJokesAfterFavouritingJoke',
+      'UpdateSearchJokesAfterUnfavouritingJoke'
+    ]);
     TestBed.configureTestingModule({
       declarations: [ JokeComponent ],
       providers: [
@@ -82,64 +91,54 @@ xdescribe('JokeComponent', () => {
   })
 
   describe('Favourite', () => {
-    it('should change joke "isFavourite" property to true', () => {
+    it('should call "UpdateFavJokesAfterFavouritingJoke" method of FavJokesService with joke as arg', () => {
       // arrange
-      component.joke.isFavourite = false;
+      favJokesServiceSpy.UpdateFavJokesAfterFavouritingJoke.and.callFake(() => {});
 
       // act
       component.Favourite();
 
       // assert
-      expect(component.joke.isFavourite).toEqual(true);
+      expect(favJokesServiceSpy.UpdateFavJokesAfterFavouritingJoke).toHaveBeenCalled();
+      expect(favJokesServiceSpy.UpdateFavJokesAfterFavouritingJoke).toHaveBeenCalledWith(component.joke);
     })
 
-    it('should call "AddFavJoke" method of FavJokesService with joke as arg', () => {
+    it('should call "UpdateSearchJokesAfterFavouritingJoke" method of SearchJokesService with joke as arg', () => {
       // arrange
-      favJokesServiceSpy.AddFavJoke.and.callFake((joke) => {});
+      searchJokesServiceSpy.UpdateSearchJokesAfterFavouritingJoke.and.callFake(() => {});
 
       // act
       component.Favourite();
 
       // assert
-      expect(favJokesServiceSpy.AddFavJoke).toHaveBeenCalled();
-      expect(favJokesServiceSpy.AddFavJoke).toHaveBeenCalledWith(component.joke);
+      expect(searchJokesServiceSpy.UpdateSearchJokesAfterFavouritingJoke).toHaveBeenCalled();
+      expect(searchJokesServiceSpy.UpdateSearchJokesAfterFavouritingJoke).toHaveBeenCalledWith(component.joke);
     })
   })
 
   describe('Unfavourite', () => {
-    it('should change joke "isFavourite" property to false', () => {
+    it('should call "UpdateFavJokesAfterUnfavouritingJoke" method of FavJokesService with joke as arg', () => {
       // arrange
-      component.joke.isFavourite = true;
+      favJokesServiceSpy.UpdateFavJokesAfterUnfavouritingJoke.and.callFake(() => {});
 
       // act
       component.Unfavourite();
 
       // assert
-      expect(component.joke.isFavourite).toEqual(false);
+      expect(favJokesServiceSpy.UpdateFavJokesAfterUnfavouritingJoke).toHaveBeenCalled();
+      expect(favJokesServiceSpy.UpdateFavJokesAfterUnfavouritingJoke).toHaveBeenCalledWith(component.joke);
     })
 
-    it('should call "RemoveFavJoke" method of FavJokesService with joke as arg', () => {
+    it('should call "UpdateSearchJokesAfterUnfavouritingJoke" method of SearchJokesService with joke as arg', () => {
       // arrange
-      favJokesServiceSpy.RemoveFavJoke.and.callFake((joke) => {});
+      searchJokesServiceSpy.UpdateSearchJokesAfterUnfavouritingJoke.and.callFake(() => {});
 
       // act
       component.Unfavourite();
 
       // assert
-      expect(favJokesServiceSpy.RemoveFavJoke).toHaveBeenCalled();
-      expect(favJokesServiceSpy.RemoveFavJoke).toHaveBeenCalledWith(component.joke);
-    })
-
-    it('should call "UpdateJokes" method of SearchJokesService with joke as arg', () => {
-      // arrange
-      searchJokesServiceSpy.UpdateJokes.and.callFake((joke) => {});
-
-      // act
-      component.Unfavourite();
-
-      // assert
-      expect(searchJokesServiceSpy.UpdateJokes).toHaveBeenCalled();
-      expect(searchJokesServiceSpy.UpdateJokes).toHaveBeenCalledWith(component.joke);
+      expect(searchJokesServiceSpy.UpdateSearchJokesAfterUnfavouritingJoke).toHaveBeenCalled();
+      expect(searchJokesServiceSpy.UpdateSearchJokesAfterUnfavouritingJoke).toHaveBeenCalledWith(component.joke);
     })
   })
 

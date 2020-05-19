@@ -26,17 +26,17 @@ class JokeServiceClass {
   }
 }
 
-xdescribe('JokeFormComponent', () => {
+describe('JokeFormComponent', () => {
   let component: JokeFormComponent;
   let fixture: ComponentFixture<JokeFormComponent>;
-  let searchJokesServiceSpy: { 'UpdateJokes': jasmine.Spy };
+  let searchJokesServiceSpy: { 'UpdateSearchJokesAfterFetchingJokes': jasmine.Spy };
   let joke;
   let jokes;
   const formBuilder: FormBuilder = new FormBuilder();
 
   beforeEach(async(() => {
     searchJokesServiceSpy = jasmine.createSpyObj('SearchJokesService',
-     ['UpdateJokes']);
+     ['UpdateSearchJokesAfterFetchingJokes']);
     TestBed.configureTestingModule({
       declarations: [ JokeFormComponent ],
       providers: [
@@ -358,15 +358,15 @@ xdescribe('JokeFormComponent', () => {
   })
 
   describe('UpdateJokes', () => {
-    it('should call "UpdateJokes" method of SearchJokesService', () => {
+    it('should call "UpdateSearchJokesAfterFetchingJokes" method of SearchJokesService', () => {
       // arrange
-      searchJokesServiceSpy.UpdateJokes.and.callFake(() => {});
+      searchJokesServiceSpy.UpdateSearchJokesAfterFetchingJokes.and.callFake(() => {});
 
       // act
       component.UpdateJokes();
 
       // assert
-      expect(searchJokesServiceSpy.UpdateJokes).toHaveBeenCalled();
+      expect(searchJokesServiceSpy.UpdateSearchJokesAfterFetchingJokes).toHaveBeenCalled();
     })
   })
 })

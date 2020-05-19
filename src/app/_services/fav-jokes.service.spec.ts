@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { FavJokesService } from './fav-jokes.service';
 import { Joke } from '../_models/joke';
 
-xdescribe('FavJokesService', () => {
+describe('FavJokesService', () => {
   let favJokesService: FavJokesService;
   let getFavJokesSpy: jasmine.Spy;
   let setFavJokesSpy: jasmine.Spy;

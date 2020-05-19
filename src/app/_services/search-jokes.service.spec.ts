@@ -3,7 +3,7 @@ import { SearchJokesService } from './search-jokes.service';
 import { Joke } from '../_models/joke';
 import { BehaviorSubject } from 'rxjs';
 
-xdescribe('SearchJokesService', () => {
+describe('SearchJokesService', () => {
   let searchJokesService: SearchJokesService;
   let pushUpdSearchJokesSpy: jasmine.Spy;
   let joke1: Joke;
