@@ -8,9 +8,8 @@ import { BehaviorSubject } from 'rxjs';
 
 export class FavJokesService {
 
-  private favJokesSource = new BehaviorSubject<Joke[]>(this.GetFavJokes()); 
+  favJokesSource = new BehaviorSubject<Joke[]>(this.GetFavJokes()); 
   currentFavJokes = this.favJokesSource.asObservable();
-
   private _showFavJokes: boolean = false;
   get showFavJokes(): boolean {
     return this._showFavJokes;
@@ -43,23 +42,25 @@ export class FavJokesService {
     sessionStorage.setItem('favJokes', JSON.stringify(updFavJokes));
   }
 
-  AddFavJoke(favJoke: Joke): void {
-    let favJokes = this.GetFavJokes();
-    favJokes.unshift(favJoke);
-    this.SetFavJokes(favJokes);
-
-    this.PushUpdatedFavJokes(favJokes);
-  }
-
-  RemoveFavJoke(unfavJoke: Joke): void {
-    let favJokes = this.GetFavJokes();
-    favJokes = favJokes.filter(joke => joke.id !== unfavJoke.id);
-    this.SetFavJokes(favJokes);
-
-    this.PushUpdatedFavJokes(favJokes);
-  }
-
   private PushUpdatedFavJokes(updFavJokes: Joke[]): void {
     this.favJokesSource.next(updFavJokes);
+  }
+
+  UpdateFavJokesAfterFavouritingJoke(favouritedJoke: Joke): void {
+    favouritedJoke.isFavourite = true;
+
+    let favJokes = this.GetFavJokes();
+    favJokes.unshift(favouritedJoke);
+    this.SetFavJokes(favJokes);
+
+    this.PushUpdatedFavJokes(favJokes);
+  }
+
+  UpdateFavJokesAfterUnfavouritingJoke(unfavouritedJoke: Joke): void {
+    let favJokes = this.GetFavJokes();
+    favJokes = favJokes.filter(favJoke => favJoke.id !== unfavouritedJoke.id);
+    this.SetFavJokes(favJokes);
+
+    this.PushUpdatedFavJokes(favJokes);
   }
 }

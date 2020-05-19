@@ -85,7 +85,7 @@ export class JokeFormComponent implements OnInit {
   }
 
   UpdateJokes(...jokes: Joke[]): void {
-    this.searchJokesService.UpdateJokes(...jokes);
+    this.searchJokesService.UpdateSearchJokesAfterFetchingJokes(...jokes);
   }
 
   GetJokeByRandom(): void {

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Joke } from '../_models/joke';
 import { BehaviorSubject } from 'rxjs';
+import { FavJokesService } from './fav-jokes.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,25 +9,72 @@ import { BehaviorSubject } from 'rxjs';
 
 export class SearchJokesService {
 
-  private jokesSource = new BehaviorSubject<Joke[]>([]); 
-  currentJokes = this.jokesSource.asObservable();
+  searchJokesSource = new BehaviorSubject<Joke[]>([]); 
+  currentSearchJokes = this.searchJokesSource.asObservable();
     
-  private PushUpdatedJokes(updJokes: Joke[]): void {
-    this.jokesSource.next(updJokes);
+  constructor(private favJokesService: FavJokesService) {}
+
+  private PushUpdatedSearchJokes(updSearchJokes: Joke[]): void {
+    this.searchJokesSource.next(updSearchJokes);
   }
 
-  UpdateJokes(...newJokes: Joke[]): void {
-    let jokes = this.jokesSource.value;
+  JokeInSearchJokes(joke: Joke): boolean {
+    let searchJokes = this.searchJokesSource.value;
+    let index = searchJokes.findIndex(searchJoke => searchJoke.id === joke.id);
+    return index === -1 ? false : true;
+  }
 
-    if(newJokes.length === 1 && 
-       jokes.findIndex(joke => joke.id === newJokes[0].id) === -1) {
-      let newJoke = newJokes[0];
-      jokes.unshift(newJoke);
+  JokeInFavJokes(joke: Joke): boolean {
+    let favJokes = this.favJokesService.favJokesSource.value;
+    let index = favJokes.findIndex(favJoke => favJoke.id === joke.id);
+    return index === -1 ? false : true;
+  }
+
+  UpdateSearchJokesAfterFetchingJokes(...newJokes: Joke[]):void {
+    let searchJokes = this.searchJokesSource.value;
+
+    newJokes.forEach(newJoke => {
+      if (!this.JokeInFavJokes(newJoke)) { 
+        console.log('joke not in fav jokes');
+        searchJokes.unshift(newJoke);  
+      }
+      else {
+        console.log('joke in fav jokes');
+        newJoke.isFavourite = true;
+        searchJokes.unshift(newJoke);
+      }
+    });
+
+    this.PushUpdatedSearchJokes(searchJokes);
+  }
+
+  UpdateSearchJokesAfterFavouritingJoke(favouritedJoke: Joke): void {
+    let searchJokes = this.searchJokesSource.value;
+
+    searchJokes.forEach(searchJoke => {
+      if (searchJoke.id === favouritedJoke.id) {
+        searchJoke.isFavourite = true;
+      }
+    });
+
+    this.PushUpdatedSearchJokes(searchJokes);
+  }
+
+  UpdateSearchJokesAfterUnfavouritingJoke(unfavouritedJoke: Joke): void {
+    let searchJokes = this.searchJokesSource.value;
+
+    if(!this.JokeInSearchJokes(unfavouritedJoke)) { 
+      unfavouritedJoke.isFavourite = false;
+      searchJokes.unshift(unfavouritedJoke);
     }
-    if(newJokes.length > 1) {
-      jokes.unshift(...newJokes);
+    else {
+      searchJokes.forEach(searchJoke => {
+        if(searchJoke.id === unfavouritedJoke.id) {
+          searchJoke.isFavourite = false;
+        }
+      })
     }
 
-    this.PushUpdatedJokes(jokes);
+    this.PushUpdatedSearchJokes(searchJokes);
   }
 }

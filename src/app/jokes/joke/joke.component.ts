@@ -30,13 +30,12 @@ export class JokeComponent implements OnInit {
   }
 
   Favourite(): void {
-    this.joke.isFavourite = true;
-    this.favJokesService.AddFavJoke(this.joke);
+    this.favJokesService.UpdateFavJokesAfterFavouritingJoke(this.joke);
+    this.searchJokesService.UpdateSearchJokesAfterFavouritingJoke(this.joke);
   }
 
   Unfavourite(): void {
-    this.joke.isFavourite = false;
-    this.favJokesService.RemoveFavJoke(this.joke);
-    this.searchJokesService.UpdateJokes(this.joke);
+    this.favJokesService.UpdateFavJokesAfterUnfavouritingJoke(this.joke);
+    this.searchJokesService.UpdateSearchJokesAfterUnfavouritingJoke(this.joke);
   }
 }

@@ -19,7 +19,7 @@ export class SearchJokesComponent implements OnInit {
   }
 
   SubscribeToJokesSource(): void {
-    this.searchJokesService.currentJokes.subscribe({
+    this.searchJokesService.currentSearchJokes.subscribe({
       next: jokes => this.jokes = jokes
     });
   }
