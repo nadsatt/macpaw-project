@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { cold } from 'jasmine-marbles';
 
-describe('JokeService', () => {
+xdescribe('JokeService', () => {
 
   let jokeService: JokeService;
   let httpClientSpy: { 'get': jasmine.Spy };

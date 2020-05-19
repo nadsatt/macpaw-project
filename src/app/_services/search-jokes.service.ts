@@ -35,11 +35,10 @@ export class SearchJokesService {
 
     newJokes.forEach(newJoke => {
       if (!this.JokeInFavJokes(newJoke)) { 
-        console.log('joke not in fav jokes');
+        newJoke.isFavourite = false;
         searchJokes.unshift(newJoke);  
       }
       else {
-        console.log('joke in fav jokes');
         newJoke.isFavourite = true;
         searchJokes.unshift(newJoke);
       }

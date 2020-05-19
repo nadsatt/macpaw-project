@@ -10,6 +10,7 @@ export class FavJokesService {
 
   favJokesSource = new BehaviorSubject<Joke[]>(this.GetFavJokes()); 
   currentFavJokes = this.favJokesSource.asObservable();
+  
   private _showFavJokes: boolean = false;
   get showFavJokes(): boolean {
     return this._showFavJokes;

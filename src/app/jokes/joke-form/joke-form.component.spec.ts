@@ -26,7 +26,7 @@ class JokeServiceClass {
   }
 }
 
-describe('JokeFormComponent', () => {
+xdescribe('JokeFormComponent', () => {
   let component: JokeFormComponent;
   let fixture: ComponentFixture<JokeFormComponent>;
   let searchJokesServiceSpy: { 'UpdateJokes': jasmine.Spy };

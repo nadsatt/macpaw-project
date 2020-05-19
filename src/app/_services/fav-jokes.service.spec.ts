@@ -2,11 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { FavJokesService } from './fav-jokes.service';
 import { Joke } from '../_models/joke';
 
-describe('FavJokesService', () => {
+xdescribe('FavJokesService', () => {
   let favJokesService: FavJokesService;
   let getFavJokesSpy: jasmine.Spy;
   let setFavJokesSpy: jasmine.Spy;
   let pushUpdFavJokesSpy: jasmine.Spy;
+  let joke: Joke;
+  let favJokes: Joke[];
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
@@ -40,40 +42,9 @@ describe('FavJokesService', () => {
     })
   })
 
-  describe('AddFavJoke', () => {
-    it('should call "GetFavJokes" method once', () => {
-      // arrange
-      setFavJokesSpy.and.callThrough();
-      pushUpdFavJokesSpy.and.callThrough();
-      getFavJokesSpy.and.callThrough();
-
-      // act
-      favJokesService.AddFavJoke(new Joke());
-
-      // assert
-      expect(getFavJokesSpy).toHaveBeenCalledTimes(1);
-    })
-
-    it('should call "SetFavJokes" method once', () => {
-      // arrange
-      getFavJokesSpy.and.callThrough();
-      setFavJokesSpy.and.callThrough();
-      getFavJokesSpy.and.callThrough();
-        
-      // act
-      favJokesService.AddFavJoke(new Joke());
-
-      // assert
-      expect(setFavJokesSpy).toHaveBeenCalledTimes(1);
-    })
-
-    it('should call "SetFavJokes" method width updated fav jokes', () => {
-      // arrange
-      let favJokes: Joke[] = [];
-      getFavJokesSpy.and.returnValue(favJokes);
-      setFavJokesSpy.and.callFake((updFavJokes) => favJokes = updFavJokes);
-      pushUpdFavJokesSpy.and.callThrough();
-      let joke = {
+  describe('UpdateFavJokesAfterFavouritingJoke', () => {
+    beforeEach(() => {
+      joke = {
         categories:[],
         created_at:"2020-01-05 13:42:25.628594",
         icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
@@ -81,108 +52,98 @@ describe('FavJokesService', () => {
         updated_at:"2020-01-05 13:42:25.628594",
         url:"https://api.chucknorris.io/jokes/r6ygrKaoQV-wQNeAd9cCPw",
         value:"Chuck Norris wrote the songs \"Stairway to Heaven\" and \"Paradise to City\" cos he was bored."
-      }
-      
+      };
+    })
+
+    it('should change value of "isFavourited" joke property to true', () => {
+      // arrange
+      setFavJokesSpy.and.callFake(() => {});
+      getFavJokesSpy.and.returnValue([]);
+      pushUpdFavJokesSpy.and.callFake(() => {});
+      joke.isFavourite = false;
+
       // act
-      favJokesService.AddFavJoke(joke);
+      favJokesService.UpdateFavJokesAfterFavouritingJoke(joke);
+
+      // assert
+      expect(joke.isFavourite).toEqual(true);
+    })
+
+    it('should call "GetFavJokes" method', () => {
+      // arrange
+      setFavJokesSpy.and.callFake(() => {});
+      getFavJokesSpy.and.returnValue([]);
+      pushUpdFavJokesSpy.and.callFake(() => {});
+
+      // act
+      favJokesService.UpdateFavJokesAfterFavouritingJoke(new Joke());
+
+      // assert
+      expect(getFavJokesSpy).toHaveBeenCalled();
+    })
+
+    it('should call "SetFavJokes" method', () => {
+      // arrange
+      setFavJokesSpy.and.callFake(() => {});
+      getFavJokesSpy.and.returnValue([]);
+      pushUpdFavJokesSpy.and.callFake(() => {});
+        
+      // act
+      favJokesService.UpdateFavJokesAfterFavouritingJoke(new Joke());
+
+      // assert
+      expect(setFavJokesSpy).toHaveBeenCalled();
+    })
+
+    it('should call "SetFavJokes" method width updated fav jokes array', () => {
+      // arrange
+      let favJokes: Joke[] = [];
+      getFavJokesSpy.and.returnValue(favJokes);
+      setFavJokesSpy.and.callFake(updFavJokes => favJokes = updFavJokes);
+      pushUpdFavJokesSpy.and.callFake(() => {});
+     
+      // act
+      favJokesService.UpdateFavJokesAfterFavouritingJoke(joke);
 
       // assert
       expect(setFavJokesSpy).toHaveBeenCalledWith(favJokes);
       expect(favJokes.length).toEqual(1);
+      expect(favJokes).toContain(joke);
     })
 
-    it('should call "PushUpdatedFavJokes" method once', () => {
+    it('should call "PushUpdatedFavJokes" method', () => {
       // arrange
-      getFavJokesSpy.and.callThrough();
-      setFavJokesSpy.and.callThrough();
-      getFavJokesSpy.and.callThrough();
+      setFavJokesSpy.and.callFake(() => {});
+      getFavJokesSpy.and.returnValue([]);
+      pushUpdFavJokesSpy.and.callFake(() => {});
       
       // act
-      favJokesService.AddFavJoke(new Joke());
+      favJokesService.UpdateFavJokesAfterFavouritingJoke(new Joke());
 
       // assert
-      expect(pushUpdFavJokesSpy).toHaveBeenCalledTimes(1);
+      expect(pushUpdFavJokesSpy).toHaveBeenCalled();
     })
 
-    it('should call "PushUpdFavJokes" method width updated fav jokes', () => {
+    it('should call "PushUpdatedFavJokes" method width updated fav jokes', () => {
       // arrange
       let favJokes: Joke[] = [];
       getFavJokesSpy.and.returnValue(favJokes);
-      setFavJokesSpy.and.callFake((updFavJokes) => favJokes = updFavJokes);
-      pushUpdFavJokesSpy.and.callThrough();
-      let joke = {
-        categories:[],
-        created_at:"2020-01-05 13:42:25.628594",
-        icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
-        id:"r6ygrKaoQV-wQNeAd9cCPw",
-        updated_at:"2020-01-05 13:42:25.628594",
-        url:"https://api.chucknorris.io/jokes/r6ygrKaoQV-wQNeAd9cCPw",
-        value:"Chuck Norris wrote the songs \"Stairway to Heaven\" and \"Paradise to City\" cos he was bored."
-      }
+      setFavJokesSpy.and.callFake(() => {});
+      pushUpdFavJokesSpy.and.callFake(updFavJokes => favJokes = updFavJokes);
       
       // act
-      favJokesService.AddFavJoke(joke);
+      favJokesService.UpdateFavJokesAfterFavouritingJoke(joke);
 
       // assert
       expect(pushUpdFavJokesSpy).toHaveBeenCalledWith(favJokes);
-      expect(favJokes.length).toEqual(1);
-    })
-
-    it('should add joke to local "favJokes" var', () => {
-      // arrange
-      let favJokes: Joke[] = [];
-      getFavJokesSpy.and.returnValue(favJokes);
-      setFavJokesSpy.and.callFake((updFavJokes) => favJokes = updFavJokes);
-      pushUpdFavJokesSpy.and.callThrough();
-      let joke = {
-        categories:[],
-        created_at:"2020-01-05 13:42:25.628594",
-        icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
-        id:"r6ygrKaoQV-wQNeAd9cCPw",
-        updated_at:"2020-01-05 13:42:25.628594",
-        url:"https://api.chucknorris.io/jokes/r6ygrKaoQV-wQNeAd9cCPw",
-        value:"Chuck Norris wrote the songs \"Stairway to Heaven\" and \"Paradise to City\" cos he was bored."
-      }
-      
-      // act
-      favJokesService.AddFavJoke(joke);
-
-      // assert
       expect(favJokes.length).toEqual(1);
       expect(favJokes).toContain(joke);
     })
   })
 
-  describe('RemoveFavJoke', () => {
-    it('should call "GetFavJokes" method once', () => {
-      // arrange
-      setFavJokesSpy.and.callThrough();
-      pushUpdFavJokesSpy.and.callThrough();
-      getFavJokesSpy.and.callThrough();
-
-      // act
-      favJokesService.RemoveFavJoke(new Joke());
-
-      // assert
-      expect(getFavJokesSpy).toHaveBeenCalledTimes(1);
-    })
-
-    it('should call "SetFavJokes" method once', () => {
-      // arrange
-      getFavJokesSpy.and.callThrough();
-      setFavJokesSpy.and.callThrough();
-      getFavJokesSpy.and.callThrough();
-        
-      // act
-      favJokesService.RemoveFavJoke(new Joke());
-
-      // assert
-      expect(setFavJokesSpy).toHaveBeenCalledTimes(1);
-    })
-
-    it('should call "SetFavJokes" method width updated fav jokes', () => {
-      // arrange
-      let joke = {
+  describe('UpdateFavJokesAfterUnfavouritingJoke', () => {
+    beforeEach(() => {
+      joke = {
         categories:[],
         created_at:"2020-01-05 13:42:25.628594",
         icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
@@ -190,8 +151,9 @@ describe('FavJokesService', () => {
         updated_at:"2020-01-05 13:42:25.628594",
         url:"https://api.chucknorris.io/jokes/r6ygrKaoQV-wQNeAd9cCPw",
         value:"Chuck Norris wrote the songs \"Stairway to Heaven\" and \"Paradise to City\" cos he was bored."
-      }
-      let favJokes: Joke[] = [
+      };
+
+      favJokes = [
         { categories:[],
           created_at:"2020-01-05 13:42:20.262289",
           icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
@@ -202,95 +164,73 @@ describe('FavJokesService', () => {
         },
         joke
       ];
+    })
+
+    it('should call "GetFavJokes" method', () => {
+      // arrange
+      setFavJokesSpy.and.callFake(() => {});
       getFavJokesSpy.and.returnValue(favJokes);
-      setFavJokesSpy.and.callFake((updFavJokes) => favJokes = updFavJokes);
+      pushUpdFavJokesSpy.and.callFake(() => {});
+
+      // act
+      favJokesService.UpdateFavJokesAfterUnfavouritingJoke(joke);
+
+      // assert
+      expect(getFavJokesSpy).toHaveBeenCalled();
+    })
+
+    it('should call "SetFavJokes" method', () => {
+      // arrange
+      setFavJokesSpy.and.callFake(() => {});
+      getFavJokesSpy.and.returnValue(favJokes);
+      pushUpdFavJokesSpy.and.callFake(() => {});
+        
+      // act
+      favJokesService.UpdateFavJokesAfterUnfavouritingJoke(new Joke());
+
+      // assert
+      expect(setFavJokesSpy).toHaveBeenCalled();
+    })
+
+    it('should call "SetFavJokes" method width updated fav jokes array', () => {
+      // arrange
+      getFavJokesSpy.and.returnValue(favJokes);
+      setFavJokesSpy.and.callFake(updFavJokes => favJokes = updFavJokes);
       pushUpdFavJokesSpy.and.callThrough();
       
       // act
-      favJokesService.RemoveFavJoke(joke);
+      favJokesService.UpdateFavJokesAfterUnfavouritingJoke(joke);
 
       // assert
       expect(setFavJokesSpy).toHaveBeenCalledWith(favJokes);
       expect(favJokes.length).toEqual(1);
+      expect(favJokes).not.toContain(joke);
     })
 
-    it('should call "PushUpdatedFavJokes" method once', () => {
+    it('should call "PushUpdatedFavJokes" method', () => {
       // arrange
-      getFavJokesSpy.and.callThrough();
-      setFavJokesSpy.and.callThrough();
-      getFavJokesSpy.and.callThrough();
+      getFavJokesSpy.and.returnValue(favJokes);
+      setFavJokesSpy.and.callFake(() => {});
+      pushUpdFavJokesSpy.and.callFake(() => {});
       
       // act
-      favJokesService.RemoveFavJoke(new Joke());
+      favJokesService.UpdateFavJokesAfterUnfavouritingJoke(new Joke());
 
       // assert
-      expect(pushUpdFavJokesSpy).toHaveBeenCalledTimes(1);
+      expect(pushUpdFavJokesSpy).toHaveBeenCalled();
     })
 
-    it('should call "PushUpdFavJokes" method width updated fav jokes', () => {
+    it('should call "PushUpdatedFavJokes" method width updated fav jokes array', () => {
       // arrange
-      let joke = {
-        categories:[],
-        created_at:"2020-01-05 13:42:25.628594",
-        icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
-        id:"r6ygrKaoQV-wQNeAd9cCPw",
-        updated_at:"2020-01-05 13:42:25.628594",
-        url:"https://api.chucknorris.io/jokes/r6ygrKaoQV-wQNeAd9cCPw",
-        value:"Chuck Norris wrote the songs \"Stairway to Heaven\" and \"Paradise to City\" cos he was bored."
-      }
-      let favJokes: Joke[] = [
-        { categories:[],
-          created_at:"2020-01-05 13:42:20.262289",
-          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
-          id:"IUX67cIdQjG1pzEqsZPGhw",
-          updated_at:"2020-01-05 13:42:20.262289",
-          url:"https://api.chucknorris.io/jokes/IUX67cIdQjG1pzEqsZPGhw",
-          value:"Chuck Norris knows the meaning of life. In fact, Chuck Norris IS the meaning of life."
-        },
-        joke
-      ];
       getFavJokesSpy.and.returnValue(favJokes);
-      setFavJokesSpy.and.callFake((updFavJokes) => favJokes = updFavJokes);
-      pushUpdFavJokesSpy.and.callThrough();
+      setFavJokesSpy.and.callFake(() => {});
+      pushUpdFavJokesSpy.and.callFake(updFavJokes => favJokes = updFavJokes);
       
       // act
-      favJokesService.RemoveFavJoke(joke);
+      favJokesService.UpdateFavJokesAfterUnfavouritingJoke(joke);
 
       // assert
       expect(pushUpdFavJokesSpy).toHaveBeenCalledWith(favJokes);
-      expect(favJokes.length).toEqual(1);
-    })
-
-    it('should remove joke from local "favJokes" var', () => {
-      // arrange
-      let joke = {
-        categories:[],
-        created_at:"2020-01-05 13:42:25.628594",
-        icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
-        id:"r6ygrKaoQV-wQNeAd9cCPw",
-        updated_at:"2020-01-05 13:42:25.628594",
-        url:"https://api.chucknorris.io/jokes/r6ygrKaoQV-wQNeAd9cCPw",
-        value:"Chuck Norris wrote the songs \"Stairway to Heaven\" and \"Paradise to City\" cos he was bored."
-      }
-      let favJokes: Joke[] = [
-        { categories:[],
-          created_at:"2020-01-05 13:42:20.262289",
-          icon_url:"https://assets.chucknorris.host/img/avatar/chuck-norris.png",
-          id:"IUX67cIdQjG1pzEqsZPGhw",
-          updated_at:"2020-01-05 13:42:20.262289",
-          url:"https://api.chucknorris.io/jokes/IUX67cIdQjG1pzEqsZPGhw",
-          value:"Chuck Norris knows the meaning of life. In fact, Chuck Norris IS the meaning of life."
-        },
-        joke
-      ];
-      getFavJokesSpy.and.returnValue(favJokes);
-      setFavJokesSpy.and.callFake((updFavJokes) => favJokes = updFavJokes);
-      pushUpdFavJokesSpy.and.callThrough();
-      
-      // act
-      favJokesService.RemoveFavJoke(joke);
-
-      // assert
       expect(favJokes.length).toEqual(1);
       expect(favJokes).not.toContain(joke);
     })
